@@ -4,6 +4,7 @@
 from panda3d.bullet import BulletWorld, BulletDebugNode
 from panda3d.core import Vec3, OrthographicLens
 from direct.task.Task import Task
+from direct.showbase.InputStateGlobal import inputState
 
 # Game imports
 
@@ -19,7 +20,7 @@ class GameBase():
         self.physics_world = None
 
         # Camera
-        self.cam_position = Vec3(0, -1, 0)
+        self.cam_position = Vec3(0, -20, 0)
         self.cam_rotation = (0.0, 0.0, 0.0)
         self.cam_filmSize = (1, 1)
 
@@ -54,12 +55,22 @@ class GameBase():
     	lens = OrthographicLens()
     	lens.setFilmSize(_filmsize[0], _filmsize[1])
     	base.cam.node().setLens(lens)
-    	base.cam.setPos(_pos)
-    	base.cam.setHpr(_rot)
+    	camera.setPos(_pos)
+    	camera.setHpr(_rot)
 
     def setupInput(self):
     	# Disable the mouse
-    	base.disableMouse()
+    	#base.disableMouse()
+
+    	# Setup Keyboard Input
+    	inputState.watchWithModifiers('left', "arrow_left")
+    	inputState.watchWithModifiers('right', "arrow_right")
+    	inputState.watchWithModifiers('left', "z")
+    	inputState.watchWithModifiers('right', "/")
+
+    	# Ingame escape for menu
+    	#self.accept('escape', func)
+
 
     ##### UPDATES #####
     def updatePhysics(self, task):
@@ -77,3 +88,5 @@ class GameBase():
     	debugNP = render.attachNewNode(debugnode)
     	if self.physics_world != None:
     		self.physics_world.setDebugNode(debugNP.node())
+    		debugNP.show()
+

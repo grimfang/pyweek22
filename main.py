@@ -28,7 +28,7 @@ class Main(ShowBase):
 
     def __init__(self):
         ShowBase.__init__(self)
-        # Set esc for force exit
+        # Set esc to force exit $ remove
         self.accept('escape', self.exitApp)
 
         ## Load/Start GameBase
@@ -37,6 +37,7 @@ class Main(ShowBase):
 
         ## Load/Start Game
         self.game = Game()
+        self.game.setPhysicsWorld(self.gamebase.physics_world)
         self.game.start()
 
         # Debug #
