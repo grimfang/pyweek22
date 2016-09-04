@@ -19,7 +19,7 @@ def createSprite(_filename, _x, _z, _transparent=1):
     sprite.setTransparency(_transparent)
     return sprite, (sx, sz)
 
-def getMousePosition():
+def getMousePos():
     if base.mouseWatcherNode.hasMouse():
         x=base.mouseWatcherNode.getMouseX()
         y=base.mouseWatcherNode.getMouseY()

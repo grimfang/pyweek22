@@ -16,7 +16,7 @@ class GameBase():
         self.parent = _parent
 
         # Physics
-        self.gravity = Vec3(0, 0, 0)
+        self.gravity = Vec3(0, 0, -1)
         self.physics_world = None
 
         # Camera

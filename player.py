@@ -7,7 +7,7 @@ from direct.task.Task import Task
 from direct.showbase.InputStateGlobal import inputState
 
 # Game imports
-from utils import createSprite
+from utils import createSprite, getMousePos
 
 #----------------------------------------------------------------------#
 
@@ -18,7 +18,7 @@ class Player():
 
 
     def start(self):
-    	self.createDoor("assets/door.png", "Left", Vec3(-0.13, 3, -0.28))
+    	self.createDoor("assets/door.png", "Left", Vec3(-0.135, 3, -0.3))
 
     	# Tasks
     	taskMgr.add(self.update, "Player_Update_Task")
@@ -28,6 +28,12 @@ class Player():
 
     def update(self, task):
 
+    	if inputState.isSet('left'):
+    		self.parent.game_doors['Left'].np.node().applyTorque(Vec3(0, -3, 0))
+
+    	else:
+    		self.parent.game_doors['Left'].np.node().applyTorque(Vec3(0, 1, 0))
+    		#print (getMousePos())
     	return task.cont
 
     #### BUILDERS ####
@@ -46,6 +52,8 @@ class Door():
 		shape = BulletBoxShape(Vec3(sprite[1][0]/2, 0.05, sprite[1][1]/2))
 		node = BulletRigidBodyNode("Player_Door_" + _side)
 		node.addShape(shape)
+		node.setMass(1)
+		node.setDeactivationEnabled(False)
 
 		self.np = _parent.game_doors_np.attachNewNode(node)
 		self.np.setCollideMask(BitMask32.allOn())
@@ -56,7 +64,7 @@ class Door():
 		# Set sprite
 		#sprite[0].clearModelNodes()
 		sprite[0].reparentTo(self.np)
-		sprite[0].setPos(-0.02, 0, -0.145)
+		sprite[0].setPos(-0.01, 0, -0.075)
 		#sprite[0].setPos(_pos)
 
 		# Hinge
@@ -65,7 +73,9 @@ class Door():
 		axisA = Vec3(0, 1, 0)
 		axisB = Vec3(0, 0, 1)
 
-		hinge = BulletHingeConstraint(node, _pos, axisA, True)
-		hinge.setDebugDrawSize(2.0)
-		hinge.setLimit(-90, 120, softness=0.9, bias=0.3, relaxation=1.0)
+		ppos = Point3(0,0,-0.09)#Point3(-0.05, 0, -0.15)
+
+		hinge = BulletHingeConstraint(node, ppos, axisA, True)
+		hinge.setDebugDrawSize(0.3)
+		hinge.setLimit(-110, 15, softness=0.9, bias=0.3, relaxation=1.0)
 		_parent.physics_world.attachConstraint(hinge)

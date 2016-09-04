@@ -41,7 +41,7 @@ class Main(ShowBase):
         self.game.start()
 
         # Debug #
-        self.gamebase.enablePhysicsDebug()
+        #self.gamebase.enablePhysicsDebug()
         print (render.ls())
 
 
