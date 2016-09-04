@@ -30,6 +30,9 @@ class GameBase():
     	# Camera
     	self.setupCamera(self.cam_position, self.cam_rotation, self.cam_filmSize)
 
+    	# Input
+    	self.setupInput()
+
     	# Start Tasks
     	taskMgr.add(self.updatePhysics, 'update-physics-task', 0)
 
@@ -47,11 +50,16 @@ class GameBase():
 
 
     def setupCamera(self, _pos, _rot, _filmsize):
+    	# Setup lens, position and rotation
     	lens = OrthographicLens()
     	lens.setFilmSize(_filmsize[0], _filmsize[1])
     	base.cam.node().setLens(lens)
     	base.cam.setPos(_pos)
     	base.cam.setHpr(_rot)
+
+    def setupInput(self):
+    	# Disable the mouse
+    	base.disableMouse()
 
     ##### UPDATES #####
     def updatePhysics(self, task):

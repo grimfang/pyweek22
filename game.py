@@ -15,7 +15,7 @@ class Game():
 
 
     def start(self):
-    	self.loadLevel("assets/test.png", 0)
+    	self.loadLevel("assets/idea.png", 0)
 
     def stop(self):
     	pass
@@ -29,3 +29,4 @@ class Game():
     	sprite.setPos(-0.5, z, -0.5)
 
     	sprite.reparentTo(render)
+
