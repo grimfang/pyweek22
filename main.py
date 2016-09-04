@@ -20,6 +20,7 @@ from direct.showbase.ShowBase import ShowBase
 
 # Game imports
 from gamebase import GameBase
+from game import Game
 
 #----------------------------------------------------------------------#
 
@@ -33,6 +34,10 @@ class Main(ShowBase):
         ## Load/Start GameBase
         self.gamebase = GameBase()
         self.gamebase.start()
+
+        ## Load/Start Game
+        self.game = Game()
+        self.game.start()
 
         # Debug #
         self.gamebase.enablePhysicsDebug()

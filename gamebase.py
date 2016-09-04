@@ -19,15 +19,16 @@ class GameBase():
         self.physics_world = None
 
         # Camera
-        self.cam_position = Vec3(0, 0, 0)
-        self.cam_rotation = (-90.0, 0.0, 0.0)
+        self.cam_position = Vec3(0, -1, 0)
+        self.cam_rotation = (0.0, 0.0, 0.0)
+        self.cam_filmSize = (1, 1)
 
     def start(self):
     	# Physics
     	self.setupPhysics(self.gravity)
 
     	# Camera
-    	self.setupCamera(self.cam_position, self.cam_rotation)
+    	self.setupCamera(self.cam_position, self.cam_rotation, self.cam_filmSize)
 
     	# Start Tasks
     	taskMgr.add(self.updatePhysics, 'update-physics-task', 0)
@@ -45,9 +46,9 @@ class GameBase():
     	self.physics_world.setGravity(_gravity)
 
 
-    def setupCamera(self, _pos, _rot):
+    def setupCamera(self, _pos, _rot, _filmsize):
     	lens = OrthographicLens()
-    	lens.setFilmSize(20, 15)
+    	lens.setFilmSize(_filmsize[0], _filmsize[1])
     	base.cam.node().setLens(lens)
     	base.cam.setPos(_pos)
     	base.cam.setHpr(_rot)
