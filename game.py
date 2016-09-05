@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 # Panda Engine imports
-from panda3d.core import CardMaker, NodePath
+from panda3d.core import CardMaker, NodePath, DirectionalLight
 
 # Game imports
 from player import Player
@@ -41,6 +41,12 @@ class Game():
     #### LOADERS ####
     def loadLevel(self, _filename):
         self.builder.parseEggFile(_filename)
+
+        # Set a simple light
+        dlight = DirectionalLight('my dlight')
+        dlnp = render.attachNewNode(dlight)
+        dlnp.setHpr(-30, 0, 0)
+        render.setLight(dlnp)
 
     def loadPlayer(self, _name):
         self.player = Player(self)

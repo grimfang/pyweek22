@@ -56,47 +56,49 @@ class Builder():
     	body.setMass(0)
 
     	np = render.attachNewNode(body)
-    	np.setCollideMask(BitMask32.allOn())
+    	np.setCollideMask(BitMask32.bit(1))
 
     	self.parent.physics_world.attachRigidBody(body)
 
     def setupDoor(self, _obj, _eggFile):
-    	shape = BulletBoxShape(Vec3(1.6, 0.4, 0.4))
-    	node = BulletRigidBodyNode(_obj.getTag("door"))
-    	node.addShape(shape)
-    	node.setMass(1)
-    	node.setDeactivationEnabled(False)
+        shape = BulletBoxShape(Vec3(1.4, 0.4, 0.4))
+        node = BulletRigidBodyNode(_obj.getTag("door"))
+        node.addShape(shape)
+        node.setMass(1)
+        node.setDeactivationEnabled(False)
 
-    	np = render.attachNewNode(node)
-    	np.setCollideMask(BitMask32.allOn())
-    	np.setPos(_obj.getPos())
-    	np.setHpr(_obj.getHpr())
+        np = render.attachNewNode(node)
+        np.setCollideMask(BitMask32.bit(2))
+        np.setPos(_obj.getPos())
+        np.setHpr(_obj.getHpr())
 
-    	self.parent.physics_world.attachRigidBody(node)
+        self.parent.physics_world.attachRigidBody(node)
 
-    	_obj.reparentTo(np)
-    	_obj.setPos(np.getPos() - _obj.getPos())
+        _obj.reparentTo(np)
+        _obj.setPos(np.getPos() - _obj.getPos())
 
-    	# Setup hinge
-    	if _obj.getTag("door") == "left" and self.isHingeLeftSet != True:
-    		pos = Point3(-2.5, 0, 0)#hingeLeft.getPos()
-    		axisA = Vec3(0, 1, 0)
-    		hinge = BulletHingeConstraint(node, pos, axisA, True)
-    		hinge.setDebugDrawSize(0.3)
-    		hinge.setLimit(-10, 60, softness=0.9, bias=0.3, relaxation=1.0)
-    		self.parent.physics_world.attachConstraint(hinge)
-    		self.isHingeLeftSet = True
+        # Setup hinge
+        if _obj.getTag("door") == "left" and self.isHingeLeftSet != True:
+            pos = Point3(-2.0, 0, 0)#hingeLeft.getPos()
+            axisA = Vec3(0, 1, 0)
+            hinge = BulletHingeConstraint(node, pos, axisA, True)
+            hinge.setDebugDrawSize(0.3)
+            hinge.setLimit(-10, 58, softness=0.9, bias=0.3, relaxation=1.0)
+            self.parent.physics_world.attachConstraint(hinge)
+            self.isHingeLeftSet = True
 
-    		self.parent.game_doors["left"] = np
+            self.parent.game_doors["left"] = np
+            self.parent.game_doors["left_hinge"] = hinge
 
-    	if _obj.getTag("door") == "right" and self.isHingeRightSet != True:
-    		pos = Point3(2.5, 0, 0)#hingeLeft.getPos()
-    		axisA = Vec3(0, 1, 0)
-    		hinge = BulletHingeConstraint(node, pos, axisA, True)
-    		hinge.setDebugDrawSize(0.3)
-    		hinge.setLimit(-60, 10, softness=0.9, bias=0.3, relaxation=1.0)
-    		self.parent.physics_world.attachConstraint(hinge)
-    		self.isHingeRightSet = True
+        if _obj.getTag("door") == "right" and self.isHingeRightSet != True:
+            pos = Point3(2.0, 0, 0)#hingeLeft.getPos()
+            axisA = Vec3(0, 1, 0)
+            hinge = BulletHingeConstraint(node, pos, axisA, True)
+            hinge.setDebugDrawSize(0.3)
+            hinge.setLimit(-58, 10, softness=0.9, bias=0.3, relaxation=1.0)
+            self.parent.physics_world.attachConstraint(hinge)
+            self.isHingeRightSet = True
 
-    		self.parent.game_doors["right"] = np
+            self.parent.game_doors["right"] = np
+            self.parent.game_doors["right_hinge"] = hinge
 

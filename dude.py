@@ -20,7 +20,14 @@ class Dude():
     def start(self):
         # Tasks
         taskMgr.add(self.update, "Dude_Update_Task")
-        self.createBody()
+
+        for x in range(-5, 5):
+            if x == 0:
+                pass
+            else:
+                self.createBody((x, 0, 5))
+
+        self.createBodyBad((-2, 0, 5.5))
 
     def stop(self):
     	taskMgr.remove('Dude_Update_Task')
@@ -28,12 +35,12 @@ class Dude():
     def update(self, task):
     	return task.cont
 
-    def createBody(self):
+    def createBody(self, _pos=(0, 0, 0)):
         radius = 0.4
         shape = BulletSphereShape(radius)
 
         node = BulletRigidBodyNode("Dude")
-        node.setMass(5)
+        node.setMass(2.0)
         node.addShape(shape)
         node.setDeactivationEnabled(False)
         np = render.attachNewNode(node)
@@ -42,3 +49,28 @@ class Dude():
         self.parent.physics_world.attachRigidBody(node)
 
         self.body = np
+        self.body.setPos(_pos)
+
+        model = loader.loadModel("assets/dude")
+        model.reparentTo(np)
+        model.setScale(0.4)
+
+    def createBodyBad(self, _pos=(0, 0, 0)):
+        radius = 0.4
+        shape = BulletSphereShape(radius)
+
+        node = BulletRigidBodyNode("Dude")
+        node.setMass(2.0)
+        node.addShape(shape)
+        node.setDeactivationEnabled(False)
+        np = render.attachNewNode(node)
+        np.setCollideMask(BitMask32.allOn())
+
+        self.parent.physics_world.attachRigidBody(node)
+
+        self.body = np
+        self.body.setPos(_pos)
+
+        model = loader.loadModel("assets/badDude")
+        model.reparentTo(np)
+        model.setScale(0.4)
