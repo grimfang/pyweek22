@@ -39,14 +39,6 @@ class Builder():
 
 
     def setupBackground(self, _obj, _eggFile):
-    	#shape = BulletPlaneShape(Vec3(0, 0.01, 0), 1)
-    	#node = BulletRigidBodyNode(_obj.getTag("background"))
-    	#node.addShape(shape)
-    	#np = render.attachNewNode(node)
-    	#np.setCollideMask(BitMask32.allOn())
-    	#np.setPos(0, 10, 0)
-    	#self.parent.physics_world.attachRigidBody(node)
-
     	_obj.reparentTo(render)
     	_obj.setPos(0, 0, 0)
 
