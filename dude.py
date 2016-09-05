@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+from datetime import datetime
+from random import randint, choice
 # Panda Engine imports
 from panda3d.bullet import BulletSphereShape, BulletRigidBodyNode
 from panda3d.core import Vec3, BitMask32, Point3
@@ -14,15 +16,23 @@ class Dude():
     def __init__(self, _parent=None):
         self.parent = _parent
 
-        self.bodies = []
+        self.dudes = []
+        self.dudesToSpawn = 10
+
+        # Spawner
+        self.secondsTime = 0
 
     def start(self):
+        taskMgr.add(self.timer, "Dude_Spawn_Timer", 0)
+        taskMgr.add(self.update, "Dude_Spawner_Task", 0)
+
+        # Start
         for x in range(-5, 5):
             if x == 0:
                 pass
             else:
                 self.body = self.createBody((x, 0, 5))
-                self.bodies.append(self.body)
+                self.dudes.append(self.body)
 
         self.badBody = self.createBodyBad((-2, 0, 5.5))
 
@@ -32,6 +42,32 @@ class Dude():
 
         self.bodies = []
 
+    def update(self, task):
+        if task.time > 3.0:
+            self.dudeSpawn()
+            return Task.again
+
+        return Task.cont
+
+    def timer(self, task):
+        self.secondsTime = int(task.time)
+        return Task.cont
+
+    def dudeSpawn(self):
+        choices = ["blue", "red"]
+
+        _type = choice(choices)
+        _pos = Point3(randint(-5, 5), 0, 5)
+
+        if _type == "blue":
+            # make blue dudes they are good
+            body = self.createBody(_pos)
+
+        if _type == "red":
+            body = self.createBodyBad(_pos)
+
+        self.dudes.append(body)
+
 
     def createBody(self, _pos=(0, 0, 0)):
         radius = 0.4
@@ -40,7 +76,7 @@ class Dude():
         node = BulletRigidBodyNode("Dude")
         node.setMass(2.0)
         node.addShape(shape)
-        node.setDeactivationEnabled(False)
+        #node.setDeactivationEnabled(False)
         np = render.attachNewNode(node)
         np.setCollideMask(BitMask32.allOn())
 
@@ -61,7 +97,7 @@ class Dude():
         node = BulletRigidBodyNode("Dude")
         node.setMass(2.0)
         node.addShape(shape)
-        node.setDeactivationEnabled(False)
+        #node.setDeactivationEnabled(False)
         np = render.attachNewNode(node)
         np.setCollideMask(BitMask32.allOn())
 
