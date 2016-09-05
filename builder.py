@@ -48,4 +48,15 @@ class Builder():
     	# example: self.hinges["left"] = Pos
 
     def setupDoor(self, _obj, _eggFile):
-    	pass
+    	shape = BulletBoxShape(Vec3(_obj.getScale()))
+    	node = BulletRigidBodyNode(_obj.getTag("door"))
+    	node.addShape(shape)
+
+    	np = render.attachNewNode(node)
+    	np.setCollideMask(BitMask32.allOn())
+    	np.setPos(_obj.getPos())
+    	np.setHpr(_obj.getHpr())
+
+    	self.parent.physics_world.attachRigidBody(node)
+
+    	_obj.reparentTo(render)
