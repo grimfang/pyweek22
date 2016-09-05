@@ -17,6 +17,8 @@ class Builder():
         	"door_hinge": self.setupDoorHinge,
         	"door": self.setupDoor}
 
+        self.hinges = {}
+
     def parseEggFile(self, _filename):
 
     	eggFile = loader.loadModel(_filename)
@@ -42,7 +44,8 @@ class Builder():
     	_obj.setPos(0, 0, 0)
 
     def setupDoorHinge(self, _obj, _eggFile):
-    	pass
+    	self.hinges[_obj.getTag("door_hinge")] = Point3(_obj.getPos())
+    	# example: self.hinges["left"] = Pos
 
     def setupDoor(self, _obj, _eggFile):
     	pass

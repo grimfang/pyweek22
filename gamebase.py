@@ -20,7 +20,7 @@ class GameBase():
         self.physics_world = None
 
         # Camera
-        self.cam_position = Vec3(0, -50, 0)
+        self.cam_position = Vec3(0, -38, 0)
         self.cam_rotation = (0.0, 0.0, 0.0)
         self.cam_filmSize = (40, 20)
 
@@ -55,8 +55,8 @@ class GameBase():
     	lens = OrthographicLens()
     	lens.setFilmSize(_filmsize[0], _filmsize[1])
     	#base.cam.node().setLens(lens)
-    	camera.setPos(_pos)
-    	camera.setHpr(_rot)
+    	base.cam.setPos(_pos)
+    	base.cam.setHpr(_rot)
 
     def setupInput(self):
     	# Disable the mouse
@@ -74,10 +74,11 @@ class GameBase():
 
     ##### UPDATES #####
     def updatePhysics(self, task):
-    	dt = globalClock.getDt()
-    	self.physics_world.doPhysics(dt, 5, 1.0/240.0)
+        dt = globalClock.getDt()
+        self.physics_world.doPhysics(dt, 5, 1.0/240.0)
+        #print(camera.getPos())
 
-    	return task.cont
+        return task.cont
 
     ##### DEBUG #####
     def enablePhysicsDebug(self):
