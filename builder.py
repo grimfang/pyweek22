@@ -2,6 +2,7 @@
 
 # Panda Engine imports
 from panda3d.bullet import BulletBoxShape, BulletRigidBodyNode, BulletHingeConstraint, BulletPlaneShape
+from panda3d.bullet import BulletTriangleMesh, BulletTriangleMeshShape
 from panda3d.core import Vec3, BitMask32, Point3
 
 # Game imports
@@ -14,7 +15,8 @@ class Builder():
         self.parent = _parent
 
         self.objectTypes = {"background": self.setupBackground,
-        	"door": self.setupDoor}
+        	"door": self.setupDoor,
+        	"wall": self.setupWalls}
 
         self.hingeLeft = None
         self.hingeRight = None
@@ -37,19 +39,34 @@ class Builder():
 
 
     def setupBackground(self, _obj, _eggFile):
-    	#shape = BulletPlaneShape(Vec3(0, 0.1, 0), 1)
+    	#shape = BulletPlaneShape(Vec3(0, 0.01, 0), 1)
     	#node = BulletRigidBodyNode(_obj.getTag("background"))
     	#node.addShape(shape)
     	#np = render.attachNewNode(node)
-    	##np.setCollideMask(BitMask32.allOn())
+    	#np.setCollideMask(BitMask32.allOn())
     	#np.setPos(0, 10, 0)
     	#self.parent.physics_world.attachRigidBody(node)
 
     	_obj.reparentTo(render)
     	_obj.setPos(0, 0, 0)
 
-    def setupDoorHinge(self, _obj, _eggFile):
-    	pass
+    def setupWalls(self, _obj, _eggFile):
+    	tmpMesh = BulletTriangleMesh()
+    	node = _obj.node()
+
+    	if node.isGeomNode():
+    		tmpMesh.addGeom(node.getGeom(0))
+    	else:
+    		return
+
+    	body = BulletRigidBodyNode("wall")
+    	body.addShape(BulletTriangleMeshShape(tmpMesh, dynamic=False))
+    	body.setMass(0)
+
+    	np = render.attachNewNode(body)
+    	np.setCollideMask(BitMask32.allOn())
+
+    	self.parent.physics_world.attachRigidBody(body)
 
     def setupDoor(self, _obj, _eggFile):
     	shape = BulletBoxShape(Vec3(1.6, 0.4, 0.4))
@@ -59,7 +76,7 @@ class Builder():
     	node.setDeactivationEnabled(False)
 
     	np = render.attachNewNode(node)
-    	#np.setCollideMask(BitMask32.allOn())
+    	np.setCollideMask(BitMask32.allOn())
     	np.setPos(_obj.getPos())
     	np.setHpr(_obj.getHpr())
 

@@ -6,6 +6,7 @@ from panda3d.core import CardMaker, NodePath
 # Game imports
 from player import Player
 from builder import Builder
+from dude import Dude
 
 #----------------------------------------------------------------------#
 
@@ -26,10 +27,10 @@ class Game():
         self.builder = Builder(self)
 
     def start(self):
-    	self.loadLevel("assets/level0")
-
-    	# player
-    	self.loadPlayer("default")
+        self.loadLevel("assets/level0")
+        # player
+        self.loadPlayer("default")
+        self.loadDude()
 
     def stop(self):
     	pass
@@ -39,9 +40,12 @@ class Game():
 
     #### LOADERS ####
     def loadLevel(self, _filename):
-    	self.builder.parseEggFile(_filename)  
-    	
+        self.builder.parseEggFile(_filename)
 
     def loadPlayer(self, _name):
-    	self.player = Player(self)
-    	self.player.start()
+        self.player = Player(self)
+        self.player.start()
+
+    def loadDude(self):
+        self.dude = Dude(self)
+        self.dude.start()

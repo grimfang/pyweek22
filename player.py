@@ -7,7 +7,6 @@ from direct.task.Task import Task
 from direct.showbase.InputStateGlobal import inputState
 
 # Game imports
-from utils import createSprite, getMousePos
 
 #----------------------------------------------------------------------#
 
@@ -30,14 +29,14 @@ class Player():
     		self.parent.game_doors['left'].node().applyTorqueImpulse(Vec3(0, -50, 0))
 
     	else:
-    		self.parent.game_doors['left'].node().applyTorque(Vec3(0, 80, 0))
+    		self.parent.game_doors['left'].node().applyTorque(Vec3(0, 100, 0))
     		#print (getMousePos())
 
     	if inputState.isSet('right'):
     		self.parent.game_doors['right'].node().applyTorqueImpulse(Vec3(0, 50, 0))
 
     	else:
-    		self.parent.game_doors['right'].node().applyTorque(Vec3(0, -80, 0))
+    		self.parent.game_doors['right'].node().applyTorque(Vec3(0, -100, 0))
     		#print (getMousePos())
     	return task.cont
 
