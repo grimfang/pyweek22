@@ -14,26 +14,24 @@ class Dude():
     def __init__(self, _parent=None):
         self.parent = _parent
 
-        self.body = None
-
+        self.bodies = []
 
     def start(self):
-        # Tasks
-        taskMgr.add(self.update, "Dude_Update_Task")
-
         for x in range(-5, 5):
             if x == 0:
                 pass
             else:
-                self.createBody((x, 0, 5))
+                self.body = self.createBody((x, 0, 5))
+                self.bodies.append(self.body)
 
-        self.createBodyBad((-2, 0, 5.5))
+        self.badBody = self.createBodyBad((-2, 0, 5.5))
 
     def stop(self):
-    	taskMgr.remove('Dude_Update_Task')
+        for body in self.bodies:
+            body.removeNode()
 
-    def update(self, task):
-    	return task.cont
+        self.bodies = []
+
 
     def createBody(self, _pos=(0, 0, 0)):
         radius = 0.4
@@ -48,12 +46,13 @@ class Dude():
 
         self.parent.physics_world.attachRigidBody(node)
 
-        self.body = np
-        self.body.setPos(_pos)
+        np.setPos(_pos)
 
         model = loader.loadModel("assets/dude")
         model.reparentTo(np)
         model.setScale(0.4)
+
+        return np
 
     def createBodyBad(self, _pos=(0, 0, 0)):
         radius = 0.4
@@ -68,9 +67,10 @@ class Dude():
 
         self.parent.physics_world.attachRigidBody(node)
 
-        self.body = np
-        self.body.setPos(_pos)
+        np.setPos(_pos)
 
         model = loader.loadModel("assets/badDude")
         model.reparentTo(np)
         model.setScale(0.4)
+
+        return np

@@ -91,8 +91,8 @@ class Main(ShowBase, FSM):
         self.game.start()
 
         # Debug #
-        self.gamebase.enablePhysicsDebug()
-        print (render.ls())
+        #self.gamebase.enablePhysicsDebug()
+        #print (render.ls())
 
     def exitGame(self):
         self.game.stop()

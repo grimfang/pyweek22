@@ -26,14 +26,23 @@ class Game():
         self.physics_world = None
         self.builder = Builder(self)
 
+        # level lights
+        self.directLight = None
+
     def start(self):
         self.loadLevel("assets/level0")
+        self.loadLights()
         # player
         self.loadPlayer("default")
         self.loadDude()
 
     def stop(self):
-    	pass
+    	#self.player.stop()
+    	#self.dude.stop()
+    	#self.physics_world = None
+
+    	render.clearLight(self.directLight)
+    	self.directLight = None
 
     def setPhysicsWorld(self, _physicsworld):
     	self.physics_world = _physicsworld
@@ -42,11 +51,14 @@ class Game():
     def loadLevel(self, _filename):
         self.builder.parseEggFile(_filename)
 
+
+    def loadLights(self):
         # Set a simple light
-        dlight = DirectionalLight('my dlight')
+        dlight = DirectionalLight('DirectLight')
         dlnp = render.attachNewNode(dlight)
         dlnp.setHpr(-30, 0, 0)
         render.setLight(dlnp)
+        self.directLight = dlnp
 
     def loadPlayer(self, _name):
         self.player = Player(self)

@@ -25,7 +25,12 @@ class Player():
     	base.accept("/", self.rightAction)
 
     def stop(self):
+    	base.ignore("arrow_left")
+    	base.ignore("arrow_right")
+    	base.ignore("z")
+    	base.ignore("/")
     	taskMgr.remove('Player_Update_Task')
+    	self.parent.game_doors = {}
 
     def update(self, task):
     	if inputState.isSet('left'):
