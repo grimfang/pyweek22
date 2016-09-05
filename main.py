@@ -64,10 +64,6 @@ class Main(ShowBase, FSM):
         ## Load/Start Game
         self.game = Game()
 
-        # Debug #
-        #self.gamebase.enablePhysicsDebug()
-        print (render.ls())
-
         self.request("Menu")
 
 
@@ -93,6 +89,10 @@ class Main(ShowBase, FSM):
         self.gamebase.start()
         self.game.setPhysicsWorld(self.gamebase.physics_world)
         self.game.start()
+
+        # Debug #
+        self.gamebase.enablePhysicsDebug()
+        print (render.ls())
 
     def exitGame(self):
         self.game.stop()

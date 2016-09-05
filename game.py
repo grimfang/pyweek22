@@ -5,6 +5,7 @@ from panda3d.core import CardMaker, NodePath
 
 # Game imports
 from player import Player
+from builder import Builder
 
 #----------------------------------------------------------------------#
 
@@ -15,6 +16,7 @@ class Game():
 
         # Physics world
         self.physics_world = None
+        self.builder = Builder(self)
 
         # Containers
         self.game_objects = {}
@@ -24,10 +26,10 @@ class Game():
         self.game_doors_np.setPos(0, 0, 0)
 
     def start(self):
-    	self.loadLevel("assets/background.png", 5)
+    	self.loadLevel("assets/level0")
 
     	# player
-    	self.loadPlayer("default")
+    	#self.loadPlayer("default")
 
     def stop(self):
     	pass
@@ -36,14 +38,9 @@ class Game():
     	self.physics_world = _physicsworld
 
     #### LOADERS ####
-    def loadLevel(self, _filename, z):
-    	tex = loader.loadTexture(_filename)   
-    	cm = CardMaker('Background')
-    	sprite = NodePath(cm.generate())   
-    	sprite.setTexture(tex)
-    	sprite.setPos(-0.5, z, -0.5)
-
-    	sprite.reparentTo(render)
+    def loadLevel(self, _filename):
+    	self.builder.parseEggFile(_filename)  
+    	
 
     def loadPlayer(self, _name):
     	self.player = Player(self)

@@ -20,9 +20,9 @@ class GameBase():
         self.physics_world = None
 
         # Camera
-        self.cam_position = Vec3(0, -20, 0)
+        self.cam_position = Vec3(0, -50, 0)
         self.cam_rotation = (0.0, 0.0, 0.0)
-        self.cam_filmSize = (1, 1)
+        self.cam_filmSize = (40, 20)
 
     def start(self):
     	# Physics
@@ -54,7 +54,7 @@ class GameBase():
     	# Setup lens, position and rotation
     	lens = OrthographicLens()
     	lens.setFilmSize(_filmsize[0], _filmsize[1])
-    	base.cam.node().setLens(lens)
+    	#base.cam.node().setLens(lens)
     	camera.setPos(_pos)
     	camera.setHpr(_rot)
 
