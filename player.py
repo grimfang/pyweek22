@@ -18,8 +18,6 @@ class Player():
 
 
     def start(self):
-    	self.createDoor("assets/door.png", "Left", Vec3(-0.135, 3, -0.3))
-
     	# Tasks
     	taskMgr.add(self.update, "Player_Update_Task")
 
@@ -29,53 +27,17 @@ class Player():
     def update(self, task):
 
     	if inputState.isSet('left'):
-    		self.parent.game_doors['Left'].np.node().applyTorque(Vec3(0, -3, 0))
+    		self.parent.game_doors['left'].node().applyTorqueImpulse(Vec3(0, -50, 0))
 
     	else:
-    		self.parent.game_doors['Left'].np.node().applyTorque(Vec3(0, 1, 0))
+    		self.parent.game_doors['left'].node().applyTorque(Vec3(0, 80, 0))
+    		#print (getMousePos())
+
+    	if inputState.isSet('right'):
+    		self.parent.game_doors['right'].node().applyTorqueImpulse(Vec3(0, 50, 0))
+
+    	else:
+    		self.parent.game_doors['right'].node().applyTorque(Vec3(0, -80, 0))
     		#print (getMousePos())
     	return task.cont
 
-    #### BUILDERS ####
-    def createDoor(self, _filename, _side, _pos):
-    	self.parent.game_doors[_side] = Door(self.parent, _filename, _side, _pos)
-
-
-
-
-#### DOOR CLASS ####
-class Door():
-	def __init__(self, _parent, _filename, _side, _pos):
-
-		sprite = createSprite(_filename, _pos.x, _pos.z)
-
-		shape = BulletBoxShape(Vec3(sprite[1][0]/2, 0.05, sprite[1][1]/2))
-		node = BulletRigidBodyNode("Player_Door_" + _side)
-		node.addShape(shape)
-		node.setMass(1)
-		node.setDeactivationEnabled(False)
-
-		self.np = _parent.game_doors_np.attachNewNode(node)
-		self.np.setCollideMask(BitMask32.allOn())
-		self.np.setPos(_pos)
-
-		_parent.physics_world.attachRigidBody(node)
-
-		# Set sprite
-		#sprite[0].clearModelNodes()
-		sprite[0].reparentTo(self.np)
-		sprite[0].setPos(-0.01, 0, -0.075)
-		#sprite[0].setPos(_pos)
-
-		# Hinge
-		pivotA = Point3(2, 0, 0)
-		pivotB = Point3(-4, 0, 0)
-		axisA = Vec3(0, 1, 0)
-		axisB = Vec3(0, 0, 1)
-
-		ppos = Point3(0,0,-0.09)#Point3(-0.05, 0, -0.15)
-
-		hinge = BulletHingeConstraint(node, ppos, axisA, True)
-		hinge.setDebugDrawSize(0.3)
-		hinge.setLimit(-110, 15, softness=0.9, bias=0.3, relaxation=1.0)
-		_parent.physics_world.attachConstraint(hinge)

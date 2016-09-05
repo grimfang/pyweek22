@@ -14,10 +14,6 @@ class Game():
     def __init__(self, _parent=None):
         self.parent = _parent
 
-        # Physics world
-        self.physics_world = None
-        self.builder = Builder(self)
-
         # Containers
         self.game_objects = {}
         self.game_doors = {}
@@ -25,11 +21,15 @@ class Game():
         self.game_doors_np = render.attachNewNode("Player_Doors")
         self.game_doors_np.setPos(0, 0, 0)
 
+        # Physics world
+        self.physics_world = None
+        self.builder = Builder(self)
+
     def start(self):
     	self.loadLevel("assets/level0")
 
     	# player
-    	#self.loadPlayer("default")
+    	self.loadPlayer("default")
 
     def stop(self):
     	pass

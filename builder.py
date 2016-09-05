@@ -37,12 +37,13 @@ class Builder():
 
 
     def setupBackground(self, _obj, _eggFile):
-    	shape = BulletPlaneShape(Vec3(0, 0.1, 0), 1)
-    	node = BulletRigidBodyNode(_obj.getTag("background"))
-    	node.addShape(shape)
-    	np = render.attachNewNode(node)
-    	#np.setCollideMask(BitMask32.allOn())
-    	self.parent.physics_world.attachRigidBody(node)
+    	#shape = BulletPlaneShape(Vec3(0, 0.1, 0), 1)
+    	#node = BulletRigidBodyNode(_obj.getTag("background"))
+    	#node.addShape(shape)
+    	#np = render.attachNewNode(node)
+    	##np.setCollideMask(BitMask32.allOn())
+    	#np.setPos(0, 10, 0)
+    	#self.parent.physics_world.attachRigidBody(node)
 
     	_obj.reparentTo(render)
     	_obj.setPos(0, 0, 0)
@@ -64,7 +65,8 @@ class Builder():
 
     	self.parent.physics_world.attachRigidBody(node)
 
-    	#_obj.reparentTo(render)
+    	_obj.reparentTo(np)
+    	_obj.setPos(np.getPos() - _obj.getPos())
 
     	# Setup hinge
     	if _obj.getTag("door") == "left" and self.isHingeLeftSet != True:
@@ -72,16 +74,20 @@ class Builder():
     		axisA = Vec3(0, 1, 0)
     		hinge = BulletHingeConstraint(node, pos, axisA, True)
     		hinge.setDebugDrawSize(0.3)
-    		hinge.setLimit(-110, 15, softness=0.9, bias=0.3, relaxation=1.0)
+    		hinge.setLimit(-10, 60, softness=0.9, bias=0.3, relaxation=1.0)
     		self.parent.physics_world.attachConstraint(hinge)
     		self.isHingeLeftSet = True
+
+    		self.parent.game_doors["left"] = np
 
     	if _obj.getTag("door") == "right" and self.isHingeRightSet != True:
     		pos = Point3(2.5, 0, 0)#hingeLeft.getPos()
     		axisA = Vec3(0, 1, 0)
     		hinge = BulletHingeConstraint(node, pos, axisA, True)
     		hinge.setDebugDrawSize(0.3)
-    		hinge.setLimit(15, -110, softness=0.9, bias=0.3, relaxation=1.0)
+    		hinge.setLimit(-60, 10, softness=0.9, bias=0.3, relaxation=1.0)
     		self.parent.physics_world.attachConstraint(hinge)
     		self.isHingeRightSet = True
+
+    		self.parent.game_doors["right"] = np
 
