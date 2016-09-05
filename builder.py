@@ -92,10 +92,10 @@ class Builder():
 
         if _obj.getTag("door") == "right" and self.isHingeRightSet != True:
             pos = Point3(2.0, 0, 0)#hingeLeft.getPos()
-            axisA = Vec3(0, 1, 0)
+            axisA = Vec3(0, -1, 0)
             hinge = BulletHingeConstraint(node, pos, axisA, True)
             hinge.setDebugDrawSize(0.3)
-            hinge.setLimit(-58, 10, softness=0.9, bias=0.3, relaxation=1.0)
+            hinge.setLimit(-10, 58, softness=0.9, bias=0.3, relaxation=1.0)
             self.parent.physics_world.attachConstraint(hinge)
             self.isHingeRightSet = True
 

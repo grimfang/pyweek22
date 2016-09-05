@@ -29,21 +29,28 @@ class Player():
 
     def update(self, task):
     	if inputState.isSet('left'):
-    		self.parent.game_doors['left'].node().applyTorque(Vec3(0, -100, 0))
+    		#self.parent.game_doors['left'].node().applyTorque(Vec3(0, -150, 0))
+    		pass
 
     	else:
-    		self.parent.game_doors['left'].node().applyTorque(Vec3(0, 100, 0))
+    		self.parent.game_doors['left'].node().applyTorque(Vec3(0, 150, 0))
+    		self.parent.game_doors['left_hinge'].enableMotor(False)
 
     	if inputState.isSet('right'):
-    		self.parent.game_doors['right'].node().applyTorque(Vec3(0, 100, 0))
+    		#self.parent.game_doors['right'].node().applyTorque(Vec3(0, 150, 0))
+    		pass
 
     	else:
-    		self.parent.game_doors['right'].node().applyTorque(Vec3(0, -100, 0))
+    		self.parent.game_doors['right'].node().applyTorque(Vec3(0, -150, 0))
+    		self.parent.game_doors['right_hinge'].enableMotor(False)
     		#print (getMousePos())
     	return task.cont
 
     def leftAction(self):
-    	self.parent.game_doors['left'].node().applyTorqueImpulse(Vec3(0, -100, 0))
+    	#self.parent.game_doors['left'].node().applyTorqueImpulse(Vec3(0, -100, 0))
+    	self.parent.game_doors['left_hinge'].enableAngularMotor(True, 20.0, 15.0)
 
     def rightAction(self):
-    	self.parent.game_doors['right'].node().applyTorqueImpulse(Vec3(0, 100, 0))
+    	#self.parent.game_doors['right'].node().applyTorqueImpulse(Vec3(0, 100, 0))
+    	#ulimit = self.parent.game_doors['right_hinge'].getUpperLimit()
+    	self.parent.game_doors['right_hinge'].enableAngularMotor(True, 20.0, 15.0)
