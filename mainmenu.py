@@ -1,6 +1,7 @@
 from direct.gui.DirectGui import (
     DirectFrame,
-    DirectButton)
+    DirectButton,
+    OnscreenImage,)
 
 class MainMenu():
     def __init__(self):
@@ -50,6 +51,15 @@ class MainMenu():
             extraArgs=["menu_QuitGame"])
         self.btnQuit.setTransparency(True)
         self.btnQuit.reparentTo(self.frameMain)
+
+
+        self.imgBouncer = OnscreenImage(
+            image="bouncer.png",
+            scale=(0.75*0.25, 1*0.25, 1*0.25),
+            pos=(-0.25, 0, -0.5))
+        self.imgBouncer.setTransparency(True)
+        self.imgBouncer.reparentTo(self.frameMain)
+
 
         self.hide()
 
