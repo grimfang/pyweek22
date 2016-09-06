@@ -16,7 +16,7 @@ class Dude():
     def __init__(self, _parent=None):
         self.parent = _parent
 
-        self.dudes = []
+        self.dudes = {}
         self.dudesToSpawn = 10
 
         # Spawner
@@ -28,14 +28,8 @@ class Dude():
         taskMgr.add(self.update, "Dude_Spawner_Task", 0)
 
         # Start
-        for x in range(-5, 5):
-            if x == 0:
-                pass
-            else:
-                self.body = self.createBody(self.count, (x, 0, 5))
-                self.dudes.append(self.body)
-
-        self.badBody = self.createBodyBad(self.count, (-2, 0, 5.5))
+        for x in range(0, 5):
+            self.dudeSpawn()
 
     def stop(self):
         for body in self.bodies:
@@ -58,26 +52,28 @@ class Dude():
         choices = ["blue", "red"]
 
         _type = choice(choices)
-        _pos = Point3(randint(-5, 5), 0, 5)
+        _pos = Point3(randint(-5, 5), 0, 8)
 
         self.count += 1
 
         if _type == "blue":
             # make blue dudes they are good
-            body = self.createBody(self.count, _pos)
+            body = self.createBody(self.count, _type, _pos)
 
         if _type == "red":
-            body = self.createBodyBad(self.count, _pos)
+            body = self.createBodyBad(self.count, _type, _pos)
 
-        self.dudes.append(body)
-        print (self.dudes)
+        self.dudes[body[0]] = body[1]
+        #print (self.dudes)
 
 
-    def createBody(self, _count, _pos=(0, 0, 0)):
+    def createBody(self, _count, _type, _pos=(0, 0, 0)):
         radius = 0.4
         shape = BulletSphereShape(radius)
 
-        node = BulletRigidBodyNode("Dude"+str(_count))
+        name = _type+"Dude"+str(_count)
+
+        node = BulletRigidBodyNode(name)
         node.setMass(2.0)
         node.addShape(shape)
         #node.setDeactivationEnabled(False)
@@ -92,13 +88,15 @@ class Dude():
         model.reparentTo(np)
         model.setScale(0.4)
 
-        return np
+        return name, np
 
-    def createBodyBad(self, _count, _pos=(0, 0, 0)):
+    def createBodyBad(self, _count, _type, _pos=(0, 0, 0)):
         radius = 0.4
         shape = BulletSphereShape(radius)
 
-        node = BulletRigidBodyNode("Dude"+str(_count))
+        name = _type+"Dude"+str(_count)
+
+        node = BulletRigidBodyNode(name)
         node.setMass(2.0)
         node.addShape(shape)
         #node.setDeactivationEnabled(False)
@@ -113,4 +111,4 @@ class Dude():
         model.reparentTo(np)
         model.setScale(0.4)
 
-        return np
+        return name, np

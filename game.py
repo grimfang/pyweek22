@@ -2,6 +2,7 @@
 
 # Panda Engine imports
 from panda3d.core import CardMaker, NodePath, DirectionalLight
+from direct.task.Task import Task
 
 # Game imports
 from player import Player
@@ -21,6 +22,10 @@ class Game():
         self.game_objects_np = render.attachNewNode("Game_Objects")
         self.game_doors_np = render.attachNewNode("Player_Doors")
         self.game_doors_np.setPos(0, 0, 0)
+        self.game_counter_node = None
+
+        self.redDudesCount = 0
+        self.blueDudesCount = 0
 
         # Physics world
         self.physics_world = None
@@ -29,20 +34,45 @@ class Game():
         # level lights
         self.directLight = None
 
+        # Dude class
+        self.dude = None
+
     def start(self):
         self.loadLevel("assets/level0")
         self.loadLights()
+        
         # player
         self.loadPlayer("default")
         self.loadDude()
+
+        # Timer
+        taskMgr.add(self.update, "Game_Update_Task", 0)
 
     def stop(self):
     	#self.player.stop()
     	#self.dude.stop()
     	#self.physics_world = None
-
     	render.clearLight(self.directLight)
     	self.directLight = None
+
+    def update(self, task):
+
+    	if self.game_counter_node == None:
+    		return
+
+    	ghost = self.game_counter_node.node()
+    	for node in ghost.getOverlappingNodes():
+    		
+    		if "redDude" in node.name:
+    			self.redDudesCount += 1
+    			self.dude.dudes[node.name].removeNode()
+
+    		if "blueDude" in node.name:
+    			self.blueDudesCount += 1
+    			self.dude.dudes[node.name].removeNode()
+    			#del self.dude.dudes[node.name]
+
+    	return Task.cont
 
     def setPhysicsWorld(self, _physicsworld):
     	self.physics_world = _physicsworld

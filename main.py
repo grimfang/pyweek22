@@ -78,7 +78,7 @@ class Main(ShowBase, FSM):
 
     def exitMenu(self):
         self.mainMenu.hide()
-
+        
     def enterOptions(self):
         self.optionsMenu.show()
 

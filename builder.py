@@ -2,7 +2,7 @@
 
 # Panda Engine imports
 from panda3d.bullet import BulletBoxShape, BulletRigidBodyNode, BulletHingeConstraint, BulletPlaneShape
-from panda3d.bullet import BulletTriangleMesh, BulletTriangleMeshShape
+from panda3d.bullet import BulletTriangleMesh, BulletTriangleMeshShape, BulletGhostNode
 from panda3d.core import Vec3, BitMask32, Point3
 
 # Game imports
@@ -16,7 +16,8 @@ class Builder():
 
         self.objectTypes = {"background": self.setupBackground,
         	"door": self.setupDoor,
-        	"wall": self.setupWalls}
+        	"wall": self.setupWalls,
+            "counter": self.setupSensor}
 
         self.hingeLeft = None
         self.hingeRight = None
@@ -102,3 +103,16 @@ class Builder():
             self.parent.game_doors["right"] = np
             self.parent.game_doors["right_hinge"] = hinge
 
+    def setupSensor(self, _obj, _eggFile):
+        shape = BulletBoxShape(Vec3(_obj.getScale()))
+
+        ghost = BulletGhostNode("Counter_Ghost_Node")
+        ghost.addShape(shape)
+
+        np = render.attachNewNode(ghost)
+        np.setPos(_obj.getPos())
+        np.setCollideMask(BitMask32(0x0f))
+
+        self.parent.physics_world.attachGhost(ghost)
+
+        self.parent.game_counter_node = np
