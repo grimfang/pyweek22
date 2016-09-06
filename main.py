@@ -8,7 +8,7 @@ loadPrcFileData("",
 """
     window-title PyWeek22
     fullscreen 0
-    win-size 1260 876
+    #win-size 1260 876
     cursor-hidden 0
     sync-video 1
     show-frame-rate-meter 1
