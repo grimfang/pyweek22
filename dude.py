@@ -21,6 +21,7 @@ class Dude():
 
         # Spawner
         self.secondsTime = 0
+        self.count = 0
 
     def start(self):
         taskMgr.add(self.timer, "Dude_Spawn_Timer", 0)
@@ -31,10 +32,10 @@ class Dude():
             if x == 0:
                 pass
             else:
-                self.body = self.createBody((x, 0, 5))
+                self.body = self.createBody(self.count, (x, 0, 5))
                 self.dudes.append(self.body)
 
-        self.badBody = self.createBodyBad((-2, 0, 5.5))
+        self.badBody = self.createBodyBad(self.count, (-2, 0, 5.5))
 
     def stop(self):
         for body in self.bodies:
@@ -59,21 +60,24 @@ class Dude():
         _type = choice(choices)
         _pos = Point3(randint(-5, 5), 0, 5)
 
+        self.count += 1
+
         if _type == "blue":
             # make blue dudes they are good
-            body = self.createBody(_pos)
+            body = self.createBody(self.count, _pos)
 
         if _type == "red":
-            body = self.createBodyBad(_pos)
+            body = self.createBodyBad(self.count, _pos)
 
         self.dudes.append(body)
+        print (self.dudes)
 
 
-    def createBody(self, _pos=(0, 0, 0)):
+    def createBody(self, _count, _pos=(0, 0, 0)):
         radius = 0.4
         shape = BulletSphereShape(radius)
 
-        node = BulletRigidBodyNode("Dude")
+        node = BulletRigidBodyNode("Dude"+str(_count))
         node.setMass(2.0)
         node.addShape(shape)
         #node.setDeactivationEnabled(False)
@@ -90,11 +94,11 @@ class Dude():
 
         return np
 
-    def createBodyBad(self, _pos=(0, 0, 0)):
+    def createBodyBad(self, _count, _pos=(0, 0, 0)):
         radius = 0.4
         shape = BulletSphereShape(radius)
 
-        node = BulletRigidBodyNode("Dude")
+        node = BulletRigidBodyNode("Dude"+str(_count))
         node.setMass(2.0)
         node.addShape(shape)
         #node.setDeactivationEnabled(False)
