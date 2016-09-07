@@ -4,7 +4,7 @@ from datetime import datetime
 from random import randint, choice
 # Panda Engine imports
 from panda3d.bullet import BulletSphereShape, BulletRigidBodyNode
-from panda3d.core import Vec3, BitMask32, Point3
+from panda3d.core import Vec3, BitMask32, Point3, CardMaker, NodePath
 from direct.task.Task import Task
 
 # Game imports
@@ -84,9 +84,17 @@ class Dude():
 
         np.setPos(_pos)
 
-        model = loader.loadModel("assets/dude")
-        model.reparentTo(np)
-        model.setScale(0.4)
+        #model = loader.loadModel("assets/dude")
+        #model.reparentTo(np)
+        #model.setScale(0.4)
+
+        tex = loader.loadTexture("assets/dudes/dude1_good.png")   
+        cm = CardMaker('spritesMaker')
+        sprite = NodePath(cm.generate())   
+        sprite.setTexture(tex)
+        sprite.reparentTo(np)
+        sprite.setPos(-0.5, 0, -0.5)
+        sprite.setCompass(render)
 
         return name, np
 
@@ -107,8 +115,16 @@ class Dude():
 
         np.setPos(_pos)
 
-        model = loader.loadModel("assets/badDude")
-        model.reparentTo(np)
-        model.setScale(0.4)
+        #model = loader.loadModel("assets/badDude")
+        #model.reparentTo(np)
+        #model.setScale(0.4)
+
+        tex = loader.loadTexture("assets/dudes/dude1_bad.png")   
+        cm = CardMaker('spritesMaker')
+        sprite = NodePath(cm.generate())   
+        sprite.setTexture(tex)
+        sprite.reparentTo(np)
+        sprite.setPos(-0.5, 0, -0.5)
+        sprite.setCompass(render)
 
         return name, np
