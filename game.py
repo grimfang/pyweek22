@@ -40,7 +40,7 @@ class Game():
     def start(self):
         self.loadLevel("assets/level0")
         self.loadLights()
-        
+
         # player
         self.loadPlayer("default")
         self.loadDude()
@@ -62,7 +62,7 @@ class Game():
 
     	ghost = self.game_counter_node.node()
     	for node in ghost.getOverlappingNodes():
-    		
+
     		if "redDude" in node.name:
     			self.redDudesCount += 1
     			self.dude.dudes[node.name].removeNode()
