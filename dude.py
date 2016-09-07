@@ -93,9 +93,10 @@ class Dude():
         sprite = NodePath(cm.generate())   
         sprite.setTexture(tex)
         sprite.reparentTo(np)
-        sprite.setPos(-0.5, 0, -0.5)
+        sprite.setPos(-0.4, 0, -0.4)
         sprite.setCompass(render)
         sprite.setTransparency(1)
+        sprite.setScale(0.8)
 
         return name, np
 
@@ -125,8 +126,9 @@ class Dude():
         sprite = NodePath(cm.generate())   
         sprite.setTexture(tex)
         sprite.reparentTo(np)
-        sprite.setPos(-0.5, 0, -0.5)
+        sprite.setPos(-0.4, 0, -0.4)
         sprite.setCompass(render)
         sprite.setTransparency(1)
+        sprite.setScale(0.8)
 
         return name, np

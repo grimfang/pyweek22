@@ -65,7 +65,7 @@ class Builder():
     	self.parent.physics_world.attachRigidBody(body)
 
     def setupDoor(self, _obj, _eggFile):
-        shape = BulletBoxShape(Vec3(1.4, 0.4, 0.4))
+        shape = BulletBoxShape(Vec3(1.7/2, 0.6/2, 0.2/2))
         node = BulletRigidBodyNode(_obj.getTag("door"))
         node.addShape(shape)
         node.setMass(1)
