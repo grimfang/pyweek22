@@ -49,7 +49,7 @@ class Dude():
         return Task.cont
 
     def dudeSpawn(self):
-        choices = ["blue", "red"]
+        choices = ["blue", "red", "blue"]
 
         _type = choice(choices)
         _pos = choice(self.parent.spawnPoints)#Point3(randint(-5, 5), 0, 8)
