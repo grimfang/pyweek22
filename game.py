@@ -81,6 +81,8 @@ class Game():
                 self.physics_world.removeRigidBody(self.dude.dudes[node.name].node())
                 self.dude.dudes[node.name].removeNode()
                 self.hud.update(self.redDudesCount, self.blueDudesCount)
+                del self.dude.dudes[node.name]
+                print("Current Len: ", len(self.dude.dudes))
                 break
 
 
@@ -89,6 +91,7 @@ class Game():
                 self.physics_world.removeRigidBody(self.dude.dudes[node.name].node())
                 self.dude.dudes[node.name].removeNode()
                 self.hud.update(self.redDudesCount, self.blueDudesCount)
+                del self.dude.dudes[node.name]
                 break
 
         return Task.cont
