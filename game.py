@@ -57,22 +57,25 @@ class Game():
 
     def update(self, task):
 
-    	if self.game_counter_node == None:
-    		return
+        if self.game_counter_node == None:
+            return
 
-    	ghost = self.game_counter_node.node()
-    	for node in ghost.getOverlappingNodes():
+        ghost = self.game_counter_node.node()
+        for node in ghost.getOverlappingNodes():
 
-    		if "redDude" in node.name:
-    			self.redDudesCount += 1
-    			self.dude.dudes[node.name].removeNode()
+            if "red" in node.name:
+                self.redDudesCount += 1
+                self.dude.dudes[node.name].removeNode()
+                break
 
-    		if "blueDude" in node.name:
-    			self.blueDudesCount += 1
-    			self.dude.dudes[node.name].removeNode()
-    			#del self.dude.dudes[node.name]
 
-    	return Task.cont
+            elif "blue" in node.name:
+                self.blueDudesCount += 1
+                self.dude.dudes[node.name].removeNode()
+                break
+                
+
+        return Task.cont
 
     def setPhysicsWorld(self, _physicsworld):
     	self.physics_world = _physicsworld
