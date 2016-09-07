@@ -27,6 +27,7 @@ class Game():
 
         self.redDudesCount = 0
         self.blueDudesCount = 0
+        self.isLosing = False
 
         # Physics world
         self.physics_world = None
@@ -55,11 +56,11 @@ class Game():
         self.hud.show()
 
     def stop(self):
-    	#self.player.stop()
-    	#self.dude.stop()
-    	#self.physics_world = None
-    	render.clearLight(self.directLight)
-    	self.directLight = None
+        #self.player.stop()
+        #self.dude.stop()
+        #self.physics_world = None
+        render.clearLight(self.directLight)
+        self.directLight = None
         self.hud.hide()
 
     def update(self, task):
@@ -72,6 +73,11 @@ class Game():
 
             if "red" in node.name:
                 self.redDudesCount += 1
+                self.blueDudesCount -= 1
+                if self.blueDudesCount <= 0:
+                    self.isLosing = True
+                    
+                self.physics_world.removeRigidBody(self.dude.dudes[node.name].node())
                 self.dude.dudes[node.name].removeNode()
                 self.hud.update(self.redDudesCount, self.blueDudesCount)
                 break
@@ -79,6 +85,7 @@ class Game():
 
             elif "blue" in node.name:
                 self.blueDudesCount += 1
+                self.physics_world.removeRigidBody(self.dude.dudes[node.name].node())
                 self.dude.dudes[node.name].removeNode()
                 self.hud.update(self.redDudesCount, self.blueDudesCount)
                 break
