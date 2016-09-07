@@ -95,6 +95,7 @@ class Dude():
         sprite.reparentTo(np)
         sprite.setPos(-0.5, 0, -0.5)
         sprite.setCompass(render)
+        sprite.setTransparency(1)
 
         return name, np
 
@@ -126,5 +127,6 @@ class Dude():
         sprite.reparentTo(np)
         sprite.setPos(-0.5, 0, -0.5)
         sprite.setCompass(render)
+        sprite.setTransparency(1)
 
         return name, np
