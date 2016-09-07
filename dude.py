@@ -52,7 +52,7 @@ class Dude():
         choices = ["blue", "red"]
 
         _type = choice(choices)
-        _pos = Point3(randint(-5, 5), 0, 8)
+        _pos = choice(self.parent.spawnPoints)#Point3(randint(-5, 5), 0, 8)
 
         self.count += 1
 

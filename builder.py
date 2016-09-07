@@ -17,12 +17,15 @@ class Builder():
         self.objectTypes = {"background": self.setupBackground,
         	"door": self.setupDoor,
         	"wall": self.setupWalls,
-            "counter": self.setupSensor}
+            "counter": self.setupSensor,
+            "spawn": self.setupSpawnPoints}
 
         self.hingeLeft = None
         self.hingeRight = None
         self.isHingeLeftSet = False
         self.isHingeRightSet = False
+
+        self.spawnPoints = []
 
     def parseEggFile(self, _filename):
 
@@ -116,3 +119,7 @@ class Builder():
         self.parent.physics_world.attachGhost(ghost)
 
         self.parent.game_counter_node = np
+
+    def setupSpawnPoints(self, _obj, _eggFile):
+        point = (_obj.getPos())
+        self.spawnPoints.append(point)

@@ -38,12 +38,13 @@ class Game():
 
         # Dude class
         self.dude = None
+        self.spawnPoints = self.builder.spawnPoints
 
         # HUD
         self.hud = Hud()
 
     def start(self):
-        self.loadLevel("assets/level0")
+        self.loadLevel("assets/level")
         self.loadLights()
 
         # player
@@ -76,7 +77,7 @@ class Game():
                 self.blueDudesCount -= 1
                 if self.blueDudesCount <= 0:
                     self.isLosing = True
-                    
+
                 self.physics_world.removeRigidBody(self.dude.dudes[node.name].node())
                 self.dude.dudes[node.name].removeNode()
                 self.hud.update(self.redDudesCount, self.blueDudesCount)
