@@ -3,6 +3,7 @@
 # Python imports
 import random
 import sys
+import os
 
 # Panda Engine imports
 from panda3d.core import (
@@ -14,7 +15,11 @@ from panda3d.core import (
     NodePath,
     TransparencyAttrib,
     TextureStage,
-    LVecBase4f,)
+    LVecBase4f,
+    ConfigPageManager,
+    ConfigVariableBool,
+    ConfigVariableDouble,
+    OFileStream,)
 from direct.interval.IntervalGlobal import Sequence
 from direct.interval.FunctionInterval import (
     Wait,
@@ -27,7 +32,9 @@ loadPrcFileData("",
     model-path $MAIN_DIR/assets/
 """
 )
-loadPrcFile("./mainConfig.prc")
+prcFile = "mainConfig.prc"
+if os.path.exists(prcFile):
+    mainConfig = loadPrcFile(prcFile)
 from direct.showbase.ShowBase import ShowBase
 from direct.fsm.FSM import FSM
 from direct.gui.DirectGui import DGG
@@ -85,6 +92,65 @@ class Main(ShowBase, FSM):
         # hide the mouse cursor
         hide_cursor()
 
+        #
+        # CONFIGURATION LOADING
+        #
+        # load given variables or set defaults
+        # check if audio should be muted
+        mute = ConfigVariableBool("audio-mute", False).getValue()
+        if mute:
+            self.disableAllAudio()
+        else:
+            self.enableAllAudio()
+
+        base.sfxManagerList[0].setVolume(ConfigVariableDouble("audio-volume-sfx", 1.0).getValue())
+
+
+        def setFullscreen():
+            """Helper function to set the window fullscreen
+            with width and height set to the screens size"""
+            # get the displays width and height
+            w = self.pipe.getDisplayWidth()
+            h = self.pipe.getDisplayHeight()
+            # set window properties
+            # clear all properties not previously set
+            base.win.clearRejectedProperties()
+            # setup new window properties
+            props = WindowProperties()
+            # Fullscreen
+            props.setFullscreen(True)
+            # set the window size to the screen resolution
+            props.setSize(w, h)
+            # request the new properties
+            base.win.requestProperties(props)
+
+        # check if the config file hasn't been created
+        if not os.path.exists(prcFile):
+            setFullscreen()
+        elif base.appRunner:
+            # When the application is started as appRunner instance, it
+            # doesn't respect our loadPrcFiles configurations specific
+            # to the window as the window is already created, hence we
+            # need to manually set them here.
+            for dec in range(mainConfig.getNumDeclarations()):
+                # check if we have the fullscreen variable
+                if mainConfig.getVariableName(dec) == "fullscreen":
+                    setFullscreen()
+        # automatically safe configuration at application exit
+        base.exitFunc = self.__writeConfig
+
+        # due to the delayed window resizing and switch to fullscreen
+        # we wait some time until everything is set so we can savely
+        # proceed with other setups like the menus
+        if base.appRunner:
+            # this behaviour only happens if run from p3d files and
+            # hence the appRunner is enabled
+            taskMgr.doMethodLater(0.5, self.postInit,
+                "post initialization", extraArgs=[])
+        else:
+            self.postInit()
+
+    def postInit(self):
         # Set esc to force exit $ remove
         self.accept('escape', self.exitApp)
 
@@ -240,6 +306,66 @@ class Main(ShowBase, FSM):
     def exitGame(self):
         self.game.stop()
         self.gamebase.stop()
+
+    def __writeConfig(self):
+        """Save current config in the prc file or if no prc file exists
+        create one. The prc file is set in the prcFile variable"""
+        page = None
+
+        volume = str(round(base.musicManager.getVolume(), 2))
+        volumeSfx = str(round(base.sfxManagerList[0].getVolume(), 2))
+        mute = "#f" if base.AppHasAudioFocus else "#t"
+        customConfigVariables = [
+            "", "audio-mute", "audio-volume", "audio-volume-sfx"]
+        if os.path.exists(prcFile):
+            # open the config file and change values according to current
+            # application settings
+            page = loadPrcFile(prcFile)
+            removeDecls = []
+            for dec in range(page.getNumDeclarations()):
+                # Check if our variables are given.
+                # NOTE: This check has to be done to not loose our base or other
+                #       manual config changes by the user
+                if page.getVariableName(dec) in customConfigVariables:
+                    decl = page.modifyDeclaration(dec)
+                    removeDecls.append(decl)
+            for dec in removeDecls:
+                page.deleteDeclaration(dec)
+            # NOTE: audio-mute are custom variables and
+            #       have to be loaded by hand at startup
+            # audio
+            page.makeDeclaration("audio-volume", volume)
+            page.makeDeclaration("audio-volume-sfx", volumeSfx)
+            page.makeDeclaration("audio-mute", mute)
+        else:
+            # Create a config file and set default values
+            cpMgr = ConfigPageManager.getGlobalPtr()
+            page = cpMgr.makeExplicitPage("App Pandaconfig")
+            # set OpenGL to be the default
+            page.makeDeclaration("load-display", "pandagl")
+            # get the displays width and height
+            w = self.pipe.getDisplayWidth()
+            h = self.pipe.getDisplayHeight()
+            # set the window size in the config file
+            page.makeDeclaration("win-size", "%d %d"%(w, h))
+            # set the default to fullscreen in the config file
+            page.makeDeclaration("fullscreen", "1")
+            # audio
+            page.makeDeclaration("audio-volume", volume)
+            page.makeDeclaration("audio-volume-sfx", volumeSfx)
+            page.makeDeclaration("audio-mute", "#f")
+            page.makeDeclaration("sync-video", "1")
+            page.makeDeclaration("show-frame-rate-meter", "1")
+            page.makeDeclaration("textures-auto-power-2", "1")
+            page.makeDeclaration("framebuffer-multisample", "1")
+            page.makeDeclaration("multisamples", "2")
+            page.makeDeclaration("texture-anisotropic-degree", "0")
+        # create a stream to the specified config file
+        configfile = OFileStream(prcFile)
+        # and now write it out
+        page.write(configfile)
+        # close the stream
+        configfile.close()
 
 main = Main()
 main.run()
