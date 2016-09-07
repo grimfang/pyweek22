@@ -8,6 +8,7 @@ from direct.task.Task import Task
 from player import Player
 from builder import Builder
 from dude import Dude
+from hud import Hud
 
 #----------------------------------------------------------------------#
 
@@ -37,6 +38,9 @@ class Game():
         # Dude class
         self.dude = None
 
+        # HUD
+        self.hud = Hud()
+
     def start(self):
         self.loadLevel("assets/level0")
         self.loadLights()
@@ -48,12 +52,15 @@ class Game():
         # Timer
         taskMgr.add(self.update, "Game_Update_Task", 0)
 
+        self.hud.show()
+
     def stop(self):
     	#self.player.stop()
     	#self.dude.stop()
     	#self.physics_world = None
     	render.clearLight(self.directLight)
     	self.directLight = None
+        self.hud.hide()
 
     def update(self, task):
 
@@ -66,14 +73,15 @@ class Game():
             if "red" in node.name:
                 self.redDudesCount += 1
                 self.dude.dudes[node.name].removeNode()
+                self.hud.update(self.redDudesCount, self.blueDudesCount)
                 break
 
 
             elif "blue" in node.name:
                 self.blueDudesCount += 1
                 self.dude.dudes[node.name].removeNode()
+                self.hud.update(self.redDudesCount, self.blueDudesCount)
                 break
-                
 
         return Task.cont
 
