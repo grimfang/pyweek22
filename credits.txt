@@ -3,3 +3,5 @@ fireclaw
 
 Assets used in this project:
 Exit Sign: https://en.wikipedia.org/wiki/File:PublicInformationSymbol_EmergencyExit.svg
+settings.svg: Ubuntu Suru Icon theme
+
