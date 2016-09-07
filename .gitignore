@@ -5,6 +5,7 @@ __pycache__/
 
 # Backup files
 *~
+*.blend[0-9]
 
 # C extensions
 *.so
