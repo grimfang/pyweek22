@@ -378,7 +378,6 @@ class Main(ShowBase, FSM):
             page.makeDeclaration("audio-volume-sfx", volumeSfx)
             page.makeDeclaration("audio-mute", "#f")
             page.makeDeclaration("sync-video", "1")
-            page.makeDeclaration("show-frame-rate-meter", "1")
             page.makeDeclaration("textures-auto-power-2", "1")
             page.makeDeclaration("framebuffer-multisample", "1")
             page.makeDeclaration("multisamples", "2")
