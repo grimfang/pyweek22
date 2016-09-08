@@ -159,6 +159,7 @@ class Main(ShowBase, FSM):
         self.accept("menu_Options", self.request, ["Options"])
         self.accept("menu_QuitGame", self.exitApp)
         self.accept("menu_Back", self.request, ["Menu"])
+        self.accept("n", self.playNextTrack)
 
         ## Load Menu
         self.mainMenu = MainMenu()
@@ -174,7 +175,9 @@ class Main(ShowBase, FSM):
         self.musicList = [
             ["Housewell - Housewell - Sea  Sun  Fun", loader.loadMusic("music/Housewell_-_Housewell_-_Sea__Sun__Fun.ogg")],
             ["KontrastE - LISTEN TO NIGHT", loader.loadMusic("music/KontrastE_-_LISTEN_TO_NIGHT.ogg")],
-            ["LukHash - THE OTHER SIDE", loader.loadMusic("music/LukHash_-_THE_OTHER_SIDE.ogg")],]
+            ["LukHash - THE OTHER SIDE", loader.loadMusic("music/LukHash_-_THE_OTHER_SIDE.ogg")],
+            ["Axl & Arth - Breathe", loader.loadMusic("music/Axl__amp__Arth_-_Breathe.ogg")],
+            ["Lyonn - The Symphony", loader.loadMusic("music/Lyonn_-_The_Symphony.ogg")],]
         self.lblNowPlaying = DirectLabel(
             text="No track running!",
             text_align=TextNode.ARight,
@@ -281,10 +284,12 @@ class Main(ShowBase, FSM):
         base.taskMgr.add(self.musicTask, "music playlist")
 
     def playNextTrack(self):
+        if self.currentTrack[0] is not None:
+            self.currentTrack[1].stop()
         while self.lastPlayed == self.currentTrack[0]:
             self.currentTrack = random.choice(self.musicList)
         self.lastPlayed = self.currentTrack[0]
-        self.lblNowPlaying["text"] = "NOW PLAYING: {}".format(self.currentTrack[0])
+        self.lblNowPlaying["text"] = "Press 'N' for Next ~ NOW PLAYING: {}".format(self.currentTrack[0])
         self.lblNowPlaying.resetFrameSize()
         self.currentTrack[1].play()
 
