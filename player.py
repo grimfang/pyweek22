@@ -38,7 +38,7 @@ class Player():
     		pass
 
     	else:
-    		self.parent.game_doors['left'].node().applyTorque(Vec3(0, 150, 0))
+    		self.parent.game_doors['left'].node().applyTorque(Vec3(0, 250, 0))
     		self.parent.game_doors['left_hinge'].enableMotor(False)
 
     	if inputState.isSet('right'):
@@ -46,7 +46,7 @@ class Player():
     		pass
 
     	else:
-    		self.parent.game_doors['right'].node().applyTorque(Vec3(0, -150, 0))
+    		self.parent.game_doors['right'].node().applyTorque(Vec3(0, -250, 0))
     		self.parent.game_doors['right_hinge'].enableMotor(False)
     		#print (getMousePos())
     	return task.cont

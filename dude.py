@@ -9,6 +9,8 @@ from direct.task.Task import Task
 
 # Game imports
 
+
+### TODO: Convert this to a object class rather, to support easier spawning
 #----------------------------------------------------------------------#
 
 class Dude():
@@ -38,6 +40,12 @@ class Dude():
         self.bodies = []
 
     def update(self, task):
+        ### TODO:
+        # starts with 3.0 
+        # moves to 1.5 in 2 min
+        # moves to 0.8 in 2.5 mins
+        # moves to 0.3 in 1min
+        # 0.1? doable
         if task.time > 3.0:
             self.dudeSpawn()
             return Task.again
