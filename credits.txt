@@ -4,6 +4,7 @@ fireclaw
 Assets used in this project:
 Exit Sign: https://en.wikipedia.org/wiki/File:PublicInformationSymbol_EmergencyExit.svg
 settings.svg: Ubuntu Suru Icon theme
+53269__the-bizniss__door-close-2.wav by THE_bizniss https://freesound.org/people/THE_bizniss/sounds/53269/
 
 Music:
 LISTEN TO NIGHT
