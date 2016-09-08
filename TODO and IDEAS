@@ -1,0 +1,27 @@
+::: TODO :::
+1. Remove red guys when they hit the red areas
+2. Maximum ball count
+3. Correct cleanup of the table and balls
+    -> starting a new game is currently not possible!!
+
+The game is fun, but it defenitely needs more gameplay elements, otherwise it's just hit bals away and don't let them fall down.
+    -> even standard pinball has fancy bumpers with sounds and scoring.
+    So we should implement as many of the following maybes and ideas as possible
+
+::: MAYBE :::
+New levels and more backstory (possibly on saturday and sunday)
+Winning conditions 
+    Possible winning conditions
+        - 50-100 blue dudes in the club
+        - Play for a limited time (1-5 Minutes per level) (could add a story and a timeless free/survival mode)
+    -> Result screen
+
+::: IDEAS ::::
+Add rubber band like objects where the balls bounce away from
+Yellow dudes which transform into ?a random color?
+Police balls that do remove red balls on hit. They won't have any effect if the get into the club.
+difficulty (addition in options which sets spawn rate and red/blue ratio)
+
+::: To discuss :::
+Should red dudes really remove blue dudes from the counter?
+    -> Maybe better to let them all count but in a result window subtract the reds from the blues.
