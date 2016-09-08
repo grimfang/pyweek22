@@ -66,7 +66,7 @@ def show_cursor():
     cursors = ["cursorRed", "cursorBlue", "cursorViolet", "cursorGreen"]
     cursor = random.choice(cursors)
     x11 = "cursors/{}.x11".format(cursor)
-    win = "assets/{}.ico".format(cursor)
+    win = "cursors/{}.ico".format(cursor)
     if sys.platform.startswith("linux"):
         props.setCursorFilename(x11)
     else:
@@ -155,7 +155,7 @@ class Main(ShowBase, FSM):
         self.accept('escape', self.exitApp)
 
         # Menu Events
-        self.accept("menu_StartGame", self.request, ["Game"])
+        self.accept("menu_StartGame", self.request, ["Intro"])
         self.accept("menu_Options", self.request, ["Options"])
         self.accept("menu_QuitGame", self.exitApp)
         self.accept("menu_Back", self.request, ["Menu"])
@@ -244,6 +244,18 @@ class Main(ShowBase, FSM):
             name="fadeInOut")
         # game intro end
 
+        # story intro
+        self.storyImage1 = create16To9LogoCard("intro1.png", "storyIntro1TS")
+        story1FadeInInterval = createFadeIn(self.storyImage1)
+        story1FadeOutInterval = createFadeOut(self.storyImage1)
+        self.storySequence = Sequence(
+            Func(self.storyImage1.show),
+            story1FadeInInterval,
+            Wait(8.0),
+            story1FadeOutInterval,
+            Func(self.request, "Game"),
+            name="story")
+
         #
         # Start with the menu after the intro has been played
         #
@@ -256,6 +268,8 @@ class Main(ShowBase, FSM):
             self.introFadeInOutSequence.finish()
         elif self.state == "Menu":
             self.userExit()
+        elif self.state == "Intro":
+            self.storySequence.finish()
         else:
             self.request("Menu")
 
@@ -271,6 +285,7 @@ class Main(ShowBase, FSM):
             self.currentTrack = random.choice(self.musicList)
         self.lastPlayed = self.currentTrack[0]
         self.lblNowPlaying["text"] = "NOW PLAYING: {}".format(self.currentTrack[0])
+        self.lblNowPlaying.resetFrameSize()
         self.currentTrack[1].play()
 
     def musicTask(self, task):
@@ -292,6 +307,9 @@ class Main(ShowBase, FSM):
 
     def exitOptions(self):
         self.optionsMenu.hide()
+
+    def enterIntro(self):
+        self.storySequence.start()
 
     def enterGame(self):
         hide_cursor()
