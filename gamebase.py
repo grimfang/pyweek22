@@ -20,7 +20,7 @@ class GameBase():
         self.physics_world = None
 
         # Camera
-        self.cam_position = Vec3(0, -38, 0)
+        self.cam_position = Vec3(0, -47, 2.5)
         self.cam_rotation = (0.0, 0.0, 0.0)
         self.cam_filmSize = (40, 20)
 
@@ -67,6 +67,12 @@ class GameBase():
     	inputState.watchWithModifiers('right', "arrow_right")
     	inputState.watchWithModifiers('left', "z")
     	inputState.watchWithModifiers('right', "/")
+        inputState.watchWithModifiers('left', "lcontrol")
+    	inputState.watchWithModifiers('right', "rcontrol")
+        inputState.watchWithModifiers('left', "lalt")
+    	inputState.watchWithModifiers('right', "ralt")
+        inputState.watchWithModifiers('left', "lshift")
+    	inputState.watchWithModifiers('right', "rshift")
 
     	# Ingame escape for menu
     	#self.accept('escape', func)
