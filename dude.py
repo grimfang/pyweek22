@@ -41,7 +41,7 @@ class Dude():
 
     def update(self, task):
         ### TODO:
-        # starts with 3.0 
+        # starts with 3.0
         # moves to 1.5 in 2 min
         # moves to 0.8 in 2.5 mins
         # moves to 0.3 in 1min
@@ -96,9 +96,10 @@ class Dude():
         #model.reparentTo(np)
         #model.setScale(0.4)
 
-        tex = loader.loadTexture("assets/dudes/dude1_good.png")   
+        dudeID = [1, 2, 3]
+        tex = loader.loadTexture("dudes/dude{}_good.png".format(choice(dudeID)))
         cm = CardMaker('spritesMaker')
-        sprite = NodePath(cm.generate())   
+        sprite = NodePath(cm.generate())
         sprite.setTexture(tex)
         sprite.reparentTo(np)
         sprite.setPos(-0.4, 0, -0.4)
@@ -129,9 +130,10 @@ class Dude():
         #model.reparentTo(np)
         #model.setScale(0.4)
 
-        tex = loader.loadTexture("assets/dudes/dude1_bad.png")   
+        dudeID = [1, 2, 3]
+        tex = loader.loadTexture("dudes/dude{}_bad.png".format(choice(dudeID)))
         cm = CardMaker('spritesMaker')
-        sprite = NodePath(cm.generate())   
+        sprite = NodePath(cm.generate())
         sprite.setTexture(tex)
         sprite.reparentTo(np)
         sprite.setPos(-0.4, 0, -0.4)
