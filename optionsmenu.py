@@ -36,7 +36,7 @@ class OptionsMenu():
             command=self.sliderMusicVolume_ValueChanged)
         self.sliderMusicVolume.reparentTo(self.frameMain)
 
-        volume = base.musicManager.getVolume()
+        volume = base.sfxManagerList[0].getVolume()
         self.sliderSFXVolume = DirectSlider(
             scale=0.5,
             pos=(0, 0, -0.4),
