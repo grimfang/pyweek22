@@ -15,10 +15,11 @@ class Builder():
         self.parent = _parent
 
         self.objectTypes = {"background": self.setupBackground,
-        	"door": self.setupDoor,
-        	"wall": self.setupWalls,
+            "door": self.setupDoor,
+            "wall": self.setupWalls,
             "counter": self.setupSensor,
-            "spawn": self.setupSpawnPoints}
+            "spawn": self.setupSpawnPoints,
+            "collector": self.setupCollector,}
 
         self.hingeLeft = None
         self.hingeRight = None
@@ -34,40 +35,40 @@ class Builder():
 
     def parseEggFile(self, _filename):
 
-    	eggFile = loader.loadModel(_filename)
+        eggFile = loader.loadModel(_filename)
 
-    	# Get the contained objects
-    	objects = eggFile.findAllMatches('**')
-    	self.hingeLeft = eggFile.find("**/hinge_left")
-    	self.hingeRight = eggFile.find("**/hinge_right")
+        # Get the contained objects
+        objects = eggFile.findAllMatches('**')
+        self.hingeLeft = eggFile.find("**/hinge_left")
+        self.hingeRight = eggFile.find("**/hinge_right")
 
-    	for obj in objects:
-    		for types in self.objectTypes:
-    			if obj.hasTag(types):
-    				self.objectTypes[types](obj, eggFile)
+        for obj in objects:
+            for types in self.objectTypes:
+                if obj.hasTag(types):
+                    self.objectTypes[types](obj, eggFile)
 
 
     def setupBackground(self, _obj, _eggFile):
-    	_obj.reparentTo(self.rootNode)
-    	_obj.setPos(0, 0, 0)
+        _obj.reparentTo(self.rootNode)
+        _obj.setPos(0, 0, 0)
 
     def setupWalls(self, _obj, _eggFile):
-    	tmpMesh = BulletTriangleMesh()
-    	node = _obj.node()
+        tmpMesh = BulletTriangleMesh()
+        node = _obj.node()
 
-    	if node.isGeomNode():
-    		tmpMesh.addGeom(node.getGeom(0))
-    	else:
-    		return
+        if node.isGeomNode():
+            tmpMesh.addGeom(node.getGeom(0))
+        else:
+            return
 
-    	body = BulletRigidBodyNode("wall")
-    	body.addShape(BulletTriangleMeshShape(tmpMesh, dynamic=False))
-    	body.setMass(0)
+        body = BulletRigidBodyNode("wall")
+        body.addShape(BulletTriangleMeshShape(tmpMesh, dynamic=False))
+        body.setMass(0)
 
-    	np = self.rootNode.attachNewNode(body)
-    	np.setCollideMask(BitMask32.bit(1))
+        np = self.rootNode.attachNewNode(body)
+        np.setCollideMask(BitMask32.bit(1))
 
-    	self.parent.physics_world.attachRigidBody(body)
+        self.parent.physics_world.attachRigidBody(body)
 
     def setupDoor(self, _obj, _eggFile):
         shape = BulletBoxShape(Vec3(1.7/2, 0.6/2, 0.2/2))
@@ -124,6 +125,22 @@ class Builder():
         self.parent.physics_world.attachGhost(ghost)
 
         self.parent.game_counter_node = np
+
+    def setupCollector(self, _obj, _eggFile):
+        print "SCALE", _obj.getScale()
+        shape = BulletBoxShape(Vec3(_obj.getScale()))
+
+        ghost = BulletGhostNode("Collector_Ghost_Node")
+        ghost.addShape(shape)
+
+        np = self.rootNode.attachNewNode(ghost)
+        np.setPos(_obj.getPos())
+        np.setHpr(_obj.getHpr())
+        np.setCollideMask(BitMask32(0x0f))
+
+        self.parent.physics_world.attachGhost(ghost)
+
+        self.parent.game_collector_nodes.append(np)
 
     def setupSpawnPoints(self, _obj, _eggFile):
         point = (_obj.getPos())

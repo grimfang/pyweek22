@@ -31,6 +31,7 @@ class Game():
         self.game_doors_np = render.attachNewNode("Player_Doors")
         self.game_doors_np.setPos(0, 0, 0)
         self.game_counter_node = None
+        self.game_collector_nodes = []
 
         self.redDudesCount = 0
         self.blueDudesCount = 0
@@ -81,7 +82,7 @@ class Game():
 
     def update(self, task):
 
-        if self.game_counter_node == None:
+        if self.game_counter_node is None:
             return
 
         ghost = self.game_counter_node.node()
@@ -108,6 +109,15 @@ class Game():
                 self.hud.update(self.redDudesCount, self.blueDudesCount)
                 del self.dude.dudes[node.name]
                 break
+
+        for collectorGhostNP in self.game_collector_nodes:
+            collectorGhost = collectorGhostNP.node()
+            for node in collectorGhost.getOverlappingNodes():
+                if "red" in node.name:
+                    self.physics_world.removeRigidBody(self.dude.dudes[node.name].node())
+                    self.dude.dudes[node.name].removeNode()
+                    self.hud.update(self.redDudesCount, self.blueDudesCount)
+                    del self.dude.dudes[node.name]
 
         return Task.cont
 
