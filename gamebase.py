@@ -59,23 +59,23 @@ class GameBase():
     	base.cam.setHpr(_rot)
 
     def setupInput(self):
-    	# Disable the mouse
-    	#base.disableMouse()
+        # Disable the mouse
+        #base.disableMouse()
 
-    	# Setup Keyboard Input
-    	inputState.watchWithModifiers('left', "arrow_left")
-    	inputState.watchWithModifiers('right', "arrow_right")
-    	inputState.watchWithModifiers('left', "z")
-    	inputState.watchWithModifiers('right', "/")
+        # Setup Keyboard Input
+        inputState.watchWithModifiers('left', "arrow_left")
+        inputState.watchWithModifiers('right', "arrow_right")
+        inputState.watchWithModifiers('left', "z")
+        inputState.watchWithModifiers('right', "/")
         inputState.watchWithModifiers('left', "lcontrol")
-    	inputState.watchWithModifiers('right', "rcontrol")
+        inputState.watchWithModifiers('right', "rcontrol")
         inputState.watchWithModifiers('left', "lalt")
-    	inputState.watchWithModifiers('right', "ralt")
+        inputState.watchWithModifiers('right', "ralt")
         inputState.watchWithModifiers('left', "lshift")
-    	inputState.watchWithModifiers('right', "rshift")
+        inputState.watchWithModifiers('right', "rshift")
 
-    	# Ingame escape for menu
-    	#self.accept('escape', func)
+        # Ingame escape for menu
+        #self.accept('escape', func)
 
 
     ##### UPDATES #####

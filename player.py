@@ -22,30 +22,30 @@ class Player():
 
 
     def start(self):
-    	# Tasks
-    	taskMgr.add(self.update, "Player_Update_Task")
-    	base.accept("arrow_left", self.leftAction)
-    	base.accept("arrow_right", self.rightAction)
-    	base.accept("z", self.leftAction)
-    	base.accept("/", self.rightAction)
+        # Tasks
+        taskMgr.add(self.update, "Player_Update_Task")
+        base.accept("arrow_left", self.leftAction)
+        base.accept("arrow_right", self.rightAction)
+        base.accept("z", self.leftAction)
+        base.accept("/", self.rightAction)
         base.accept("lcontrol", self.leftAction)
-    	base.accept("rcontrol", self.rightAction)
+        base.accept("rcontrol", self.rightAction)
         base.accept("lalt", self.leftAction)
-    	base.accept("ralt", self.rightAction)
+        base.accept("ralt", self.rightAction)
         base.accept("lshift", self.leftAction)
-    	base.accept("rshift", self.rightAction)
+        base.accept("rshift", self.rightAction)
 
     def stop(self):
-    	base.ignore("arrow_left")
-    	base.ignore("arrow_right")
-    	base.ignore("z")
-    	base.ignore("/")
+        base.ignore("arrow_left")
+        base.ignore("arrow_right")
+        base.ignore("z")
+        base.ignore("/")
         base.ignore("lcontrol")
-    	base.ignore("rcontrol")
+        base.ignore("rcontrol")
         base.ignore("lalt")
-    	base.ignore("ralt")
-    	taskMgr.remove('Player_Update_Task')
-    	self.parent.game_doors = {}
+        base.ignore("ralt")
+        taskMgr.remove('Player_Update_Task')
+        self.parent.game_doors = {}
 
     def update(self, task):
     	if inputState.isSet('left'):
@@ -67,13 +67,13 @@ class Player():
     	return task.cont
 
     def leftAction(self):
-    	#self.parent.game_doors['left'].node().applyTorqueImpulse(Vec3(0, -100, 0))
-    	self.parent.game_doors['left_hinge'].enableAngularMotor(True, 20.0, 15.0)
+        #self.parent.game_doors['left'].node().applyTorqueImpulse(Vec3(0, -100, 0))
+        self.parent.game_doors['left_hinge'].enableAngularMotor(True, 20.0, 15.0)
         choice(self.doorsfx).play()
 
 
     def rightAction(self):
-    	#self.parent.game_doors['right'].node().applyTorqueImpulse(Vec3(0, 100, 0))
-    	#ulimit = self.parent.game_doors['right_hinge'].getUpperLimit()
-    	self.parent.game_doors['right_hinge'].enableAngularMotor(True, 20.0, 15.0)
+        #self.parent.game_doors['right'].node().applyTorqueImpulse(Vec3(0, 100, 0))
+        #ulimit = self.parent.game_doors['right_hinge'].getUpperLimit()
+        self.parent.game_doors['right_hinge'].enableAngularMotor(True, 20.0, 15.0)
         choice(self.doorsfx).play()
