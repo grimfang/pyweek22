@@ -27,6 +27,11 @@ class Builder():
 
         self.spawnPoints = []
 
+        self.rootNode = render.attachNewNode("builder_root")
+
+    def cleanup(self):
+        self.rootNode.removeNode()
+
     def parseEggFile(self, _filename):
 
     	eggFile = loader.loadModel(_filename)
@@ -43,7 +48,7 @@ class Builder():
 
 
     def setupBackground(self, _obj, _eggFile):
-    	_obj.reparentTo(render)
+    	_obj.reparentTo(self.rootNode)
     	_obj.setPos(0, 0, 0)
 
     def setupWalls(self, _obj, _eggFile):
@@ -59,7 +64,7 @@ class Builder():
     	body.addShape(BulletTriangleMeshShape(tmpMesh, dynamic=False))
     	body.setMass(0)
 
-    	np = render.attachNewNode(body)
+    	np = self.rootNode.attachNewNode(body)
     	np.setCollideMask(BitMask32.bit(1))
 
     	self.parent.physics_world.attachRigidBody(body)
@@ -71,7 +76,7 @@ class Builder():
         node.setMass(1)
         node.setDeactivationEnabled(False)
 
-        np = render.attachNewNode(node)
+        np = self.rootNode.attachNewNode(node)
         np.setCollideMask(BitMask32.bit(2))
         np.setPos(_obj.getPos())
         np.setHpr(_obj.getHpr())
@@ -112,7 +117,7 @@ class Builder():
         ghost = BulletGhostNode("Counter_Ghost_Node")
         ghost.addShape(shape)
 
-        np = render.attachNewNode(ghost)
+        np = self.rootNode.attachNewNode(ghost)
         np.setPos(_obj.getPos())
         np.setCollideMask(BitMask32(0x0f))
 

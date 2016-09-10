@@ -70,9 +70,10 @@ class Game():
         taskMgr.add(self.discoLightTask, "the lightshow")
 
     def stop(self):
-        #self.player.stop()
-        #self.dude.stop()
-        #self.physics_world = None
+        self.player.stop()
+        self.dude.stop()
+        self.builder.cleanup()
+        self.physics_world = None
         render.clearLight()
         self.directLight = None
         self.hud.hide()

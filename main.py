@@ -165,12 +165,6 @@ class Main(ShowBase, FSM):
         self.mainMenu = MainMenu()
         self.optionsMenu = OptionsMenu()
 
-        ## Load/Start GameBase
-        self.gamebase = GameBase()
-
-        ## Load/Start Game
-        self.game = Game()
-
         ## Load music list
         self.musicList = [
             ["Housewell - Housewell - Sea  Sun  Fun", loader.loadMusic("music/Housewell_-_Housewell_-_Sea__Sun__Fun.ogg")],
@@ -182,9 +176,10 @@ class Main(ShowBase, FSM):
             text="No track running!",
             text_align=TextNode.ARight,
             text_fg=(240/255.0,255/255.0,240/255.0,0.75),
-            pos=(base.a2dRight-0.05, 0, base.a2dBottom+0.05),
+            pos=(base.a2dRight-0.05, 0, base.a2dBottom+0.1),
             scale=0.04,
-            frameColor=(0,0,0,0.5),)
+            frameColor=(0,0,0,0.5),
+            sortOrder = 10)
         self.lblNowPlaying.hide()
 
         # The games Intro
@@ -289,7 +284,7 @@ class Main(ShowBase, FSM):
         while self.lastPlayed == self.currentTrack[0]:
             self.currentTrack = random.choice(self.musicList)
         self.lastPlayed = self.currentTrack[0]
-        self.lblNowPlaying["text"] = "Press 'N' for Next ~ NOW PLAYING: {}".format(self.currentTrack[0])
+        self.lblNowPlaying["text"] = "Press 'N' for Next ~\nNOW PLAYING: {}".format(self.currentTrack[0])
         self.lblNowPlaying.resetFrameSize()
         self.currentTrack[1].play()
 
@@ -318,6 +313,10 @@ class Main(ShowBase, FSM):
 
     def enterGame(self):
         hide_cursor()
+        ## Load/Start GameBase
+        self.gamebase = GameBase()
+        ## Load/Start Game
+        self.game = Game()
         self.gamebase.start()
         self.game.setPhysicsWorld(self.gamebase.physics_world)
         self.game.start()
@@ -329,6 +328,10 @@ class Main(ShowBase, FSM):
     def exitGame(self):
         self.game.stop()
         self.gamebase.stop()
+        del self.game
+        del self.gamebase
+        self.game = None
+        self.gamebase = None
 
     def __writeConfig(self):
         """Save current config in the prc file or if no prc file exists

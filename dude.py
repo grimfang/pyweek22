@@ -34,10 +34,11 @@ class Dude():
             self.dudeSpawn()
 
     def stop(self):
-        for body in self.bodies:
-            body.removeNode()
-
-        self.bodies = []
+        taskMgr.remove("Dude_Spawn_Timer")
+        taskMgr.remove("Dude_Spawner_Task")
+        for name in self.dudes.keys():
+            self.dudes[name].removeNode()
+        self.dudes = {}
 
     def update(self, task):
         ### TODO:
