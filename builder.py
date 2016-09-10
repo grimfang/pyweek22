@@ -3,7 +3,7 @@
 # Panda Engine imports
 from panda3d.bullet import BulletBoxShape, BulletRigidBodyNode, BulletHingeConstraint, BulletPlaneShape
 from panda3d.bullet import BulletTriangleMesh, BulletTriangleMeshShape, BulletGhostNode
-from panda3d.core import Vec3, BitMask32, Point3
+from panda3d.core import Vec3, BitMask32, Point3, VBase3, Mat3
 
 # Game imports
 
@@ -127,8 +127,16 @@ class Builder():
         self.parent.game_counter_node = np
 
     def setupCollector(self, _obj, _eggFile):
-        print ("SCALE", _obj.getScale())
-        shape = BulletBoxShape(Vec3(_obj.getScale()))
+        print (_obj)
+        tb = _obj.getTightBounds()
+        boxSize = VBase3(tb[1] - tb[0])
+        # TODO: istn't there a better way to multiply those two vectors?
+        s = _obj.getTransform().getScale()
+        boxSize[0] *=  s[0]
+        boxSize[1] *=  s[1]
+        boxSize[2] *=  s[2]
+        print (boxSize)
+        shape = BulletBoxShape(boxSize)
 
         ghost = BulletGhostNode("Collector_Ghost_Node")
         ghost.addShape(shape)
