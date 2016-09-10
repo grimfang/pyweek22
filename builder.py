@@ -127,7 +127,7 @@ class Builder():
         self.parent.game_counter_node = np
 
     def setupCollector(self, _obj, _eggFile):
-        print "SCALE", _obj.getScale()
+        print ("SCALE", _obj.getScale())
         shape = BulletBoxShape(Vec3(_obj.getScale()))
 
         ghost = BulletGhostNode("Collector_Ghost_Node")

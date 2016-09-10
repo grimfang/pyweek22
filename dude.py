@@ -24,9 +24,10 @@ class Dude():
         # Spawner
         self.secondsTime = 0
         self.count = 0
+        self.maxDudesAllowed = 20
 
     def start(self):
-        taskMgr.add(self.timer, "Dude_Spawn_Timer", 0)
+        #taskMgr.add(self.timer, "Dude_Spawn_Timer", 0)
         taskMgr.add(self.update, "Dude_Spawner_Task", 0)
 
         # Start
@@ -34,10 +35,11 @@ class Dude():
             self.dudeSpawn()
 
     def stop(self):
-        taskMgr.remove("Dude_Spawn_Timer")
+        #taskMgr.remove("Dude_Spawn_Timer")
         taskMgr.remove("Dude_Spawner_Task")
         for name in self.dudes.keys():
             self.dudes[name].removeNode()
+            #self.parent.physics_world.removeRigidBody(self.dudes[name].node())
         self.dudes = {}
 
     def update(self, task):
@@ -47,7 +49,7 @@ class Dude():
         # moves to 0.8 in 2.5 mins
         # moves to 0.3 in 1min
         # 0.1? doable
-        if task.time > 3.0:
+        if task.time > 3.0 and len(self.dudes) < self.maxDudesAllowed:
             self.dudeSpawn()
             return Task.again
 
