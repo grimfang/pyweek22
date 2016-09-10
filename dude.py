@@ -49,8 +49,11 @@ class Dude():
         # moves to 0.8 in 2.5 mins
         # moves to 0.3 in 1min
         # 0.1? doable
-        if task.time > 3.0 and len(self.dudes) < self.maxDudesAllowed:
-            self.dudeSpawn()
+        if task.time > 1.8:
+            if self.getDudesCount() < self.maxDudesAllowed:
+                self.dudeSpawn()
+                return Task.again
+            
             return Task.again
 
         return Task.cont
@@ -58,6 +61,9 @@ class Dude():
     def timer(self, task):
         self.secondsTime = int(task.time)
         return Task.cont
+
+    def getDudesCount(self):
+        return len(self.dudes)
 
     def dudeSpawn(self):
         choices = ["blue", "red", "blue"]
