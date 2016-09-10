@@ -1,8 +1,7 @@
 ::: TODO :::
 1. Remove red guys when they hit the red areas
 2. Maximum ball count
-3. Correct cleanup of the table and balls
-    -> starting a new game is currently not possible!!
+3. Check if everything is cleaned up correctly now
 
 The game is fun, but it defenitely needs more gameplay elements, otherwise it's just hit bals away and don't let them fall down.
     -> even standard pinball has fancy bumpers with sounds and scoring.
