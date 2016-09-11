@@ -49,11 +49,20 @@ class Dude():
         # moves to 0.8 in 2.5 mins
         # moves to 0.3 in 1min
         # 0.1? doable
-        if task.time > 1.8:
+
+        spawnTime = 1.8
+        if base.difficulty == 0:
+            spawnTime = 1.8
+        if base.difficulty == 1:
+            spawnTime = 0.8
+        if base.difficulty == 2:
+            spawnTime = 0.3
+
+        if task.time > spawnTime:
             if self.getDudesCount() < self.maxDudesAllowed:
                 self.dudeSpawn()
                 return Task.again
-            
+
             return Task.again
 
         return Task.cont
@@ -67,6 +76,12 @@ class Dude():
 
     def dudeSpawn(self):
         choices = ["blue", "red", "blue"]
+        if base.difficulty == 0:
+            choices = ["blue", "red", "blue"]
+        if base.difficulty == 1:
+            choices = ["blue", "red", "red"]
+        if base.difficulty == 1:
+            choices = ["blue", "red", "red", "red"]
 
         _type = choice(choices)
         _pos = choice(self.parent.spawnPoints)#Point3(randint(-5, 5), 0, 8)

@@ -21,7 +21,7 @@ from hud import Hud
 
 class Game():
 
-    def __init__(self, _parent=None, winCondition=25):
+    def __init__(self, _parent=None):
         self.parent = _parent
 
         # Containers
@@ -35,8 +35,6 @@ class Game():
 
         self.redDudesCount = 0
         self.blueDudesCount = 0
-
-        self.winCondition = winCondition
 
         # Physics world
         self.physics_world = None
@@ -57,7 +55,9 @@ class Game():
 
 
 
-    def start(self, levelID):
+    def start(self, levelID, winCondition=25):
+        self.winCondition = winCondition
+
         self.loadLevel("assets/level{}".format(levelID))
         self.loadLights()
 

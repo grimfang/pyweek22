@@ -18,6 +18,7 @@ from panda3d.core import (
     LVecBase4f,
     ConfigPageManager,
     ConfigVariableBool,
+    ConfigVariableInt,
     ConfigVariableDouble,
     OFileStream,)
 from direct.interval.IntervalGlobal import Sequence
@@ -104,7 +105,7 @@ class Main(ShowBase, FSM):
             self.enableAllAudio()
 
         base.sfxManagerList[0].setVolume(ConfigVariableDouble("audio-volume-sfx", 1.0).getValue())
-
+        base.difficulty = ConfigVariableInt("difficulty", 0).getValue()
 
         def setFullscreen():
             """Helper function to set the window fullscreen
@@ -343,7 +344,7 @@ class Main(ShowBase, FSM):
 
     def startGame(self):
         self.acceptWinLoose()
-        self.currentLevel = 1
+        self.currentLevel = 2
         self.request("Intro")
 
     def enterMenu(self):
@@ -371,11 +372,16 @@ class Main(ShowBase, FSM):
         self.game = Game()
         self.gamebase.start()
         self.game.setPhysicsWorld(self.gamebase.physics_world)
-        self.game.start(self.currentLevel)
+        if base.difficulty == 0:
+            self.game.start(self.currentLevel, 25)
+        elif base.difficulty == 1:
+            self.game.start(self.currentLevel, 50)
+        else:
+            self.game.start(self.currentLevel, 100)
         self.acceptWinLoose()
 
         # Debug #
-        #self.gamebase.enablePhysicsDebug()
+        self.gamebase.enablePhysicsDebug()
         #print (render.ls())
 
     def exitGame(self):
@@ -390,13 +396,10 @@ class Main(ShowBase, FSM):
     def enterOutro(self):
         if self.youWon:
             if self.currentLevel == 1:
-                print "start won seq"
                 self.outroWonSequence.start()
             else:
-                print "start won game seq"
                 self.outroWonGameSequence.start()
         else:
-            print "start lost seq"
             self.outroLostSequence.start()
 
     def wonGame(self):
@@ -426,8 +429,9 @@ class Main(ShowBase, FSM):
         volume = str(round(base.musicManager.getVolume(), 2))
         volumeSfx = str(round(base.sfxManagerList[0].getVolume(), 2))
         mute = "#f" if base.AppHasAudioFocus else "#t"
+        difficuty = str(base.difficulty)
         customConfigVariables = [
-            "", "audio-mute", "audio-volume", "audio-volume-sfx"]
+            "", "audio-mute", "audio-volume", "audio-volume-sfx", "difficulty"]
         if os.path.exists(prcFile):
             # open the config file and change values according to current
             # application settings
@@ -448,6 +452,7 @@ class Main(ShowBase, FSM):
             page.makeDeclaration("audio-volume", volume)
             page.makeDeclaration("audio-volume-sfx", volumeSfx)
             page.makeDeclaration("audio-mute", mute)
+            page.makeDeclaration("difficulty", difficuty)
         else:
             # Create a config file and set default values
             cpMgr = ConfigPageManager.getGlobalPtr()
@@ -470,6 +475,7 @@ class Main(ShowBase, FSM):
             page.makeDeclaration("framebuffer-multisample", "1")
             page.makeDeclaration("multisamples", "2")
             page.makeDeclaration("texture-anisotropic-degree", "0")
+            page.makeDeclaration("difficulty", 0)
         # create a stream to the specified config file
         configfile = OFileStream(prcFile)
         # and now write it out

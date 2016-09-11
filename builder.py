@@ -134,7 +134,7 @@ class Builder():
         boxSize[0] *=  s[0]
         boxSize[1] *=  s[1]
         boxSize[2] *=  s[2]
-        shape = BulletBoxShape(boxSize)
+        shape = BulletBoxShape(boxSize*0.5)
 
         ghost = BulletGhostNode("Collector_Ghost_Node")
         ghost.addShape(shape)

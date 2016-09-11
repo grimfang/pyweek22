@@ -67,8 +67,16 @@ class Hud():
         self.lblBlues.reparentTo(self.frameMain)
         self.hide()
 
+        txt = ""
+        if base.difficulty == 0:
+            txt = "Get 25 good dudes.\nIf you have more red\ndudes than blue,\nyou loose."
+        elif base.difficulty == 1:
+            txt = "Get 50 good dudes.\nIf you have more red\ndudes than blue,\nyou loose."
+        else:
+            txt = "Get 100 good dudes.\nIf you have more red\ndudes than blue,\nyou loose."
+
         self.lblInfoWinCondition = DirectLabel(
-            text="Get 25 good dudes.\nIf you have more red\ndudes than blue,\nyou loose.",
+            text=txt,
             text_fg=(240/255.0,255/255.0,240/255.0,1),
             text_align=TextNode.ALeft,
             scale=0.08,
