@@ -63,8 +63,19 @@ class Hud():
             scale=0.08,
             pos=(0.1,0,0.3),
             frameColor=(0,0,0,0),)
-        self.lblReds.setTransparency(True)
+        self.lblBlues.setTransparency(True)
         self.lblBlues.reparentTo(self.frameMain)
+        self.hide()
+
+        self.lblInfoWinCondition = DirectLabel(
+            text="Get 25 good dudes.\nIf you have more red\ndudes than blue,\nyou loose.",
+            text_fg=(240/255.0,255/255.0,240/255.0,1),
+            text_align=TextNode.ALeft,
+            scale=0.08,
+            pos=(0.1,0,0.0),
+            frameColor=(0,0,0,0),)
+        self.lblInfoWinCondition.setTransparency(True)
+        self.lblInfoWinCondition.reparentTo(self.frameMain)
         self.hide()
 
         self.lblInfo = DirectLabel(

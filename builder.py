@@ -127,7 +127,6 @@ class Builder():
         self.parent.game_counter_node = np
 
     def setupCollector(self, _obj, _eggFile):
-        print (_obj)
         tb = _obj.getTightBounds()
         boxSize = VBase3(tb[1] - tb[0])
         # TODO: istn't there a better way to multiply those two vectors?
@@ -135,7 +134,6 @@ class Builder():
         boxSize[0] *=  s[0]
         boxSize[1] *=  s[1]
         boxSize[2] *=  s[2]
-        print (boxSize)
         shape = BulletBoxShape(boxSize)
 
         ghost = BulletGhostNode("Collector_Ghost_Node")

@@ -151,11 +151,15 @@ class Main(ShowBase, FSM):
             self.postInit()
 
     def postInit(self):
+        # Some game related variables
+        self.currentLevel = 1
+        self.youWon = False
+
         # Set esc to force exit $ remove
         self.accept('escape', self.exitApp)
 
         # Menu Events
-        self.accept("menu_StartGame", self.request, ["Intro"])
+        self.accept("menu_StartGame", self.startGame)
         self.accept("menu_Options", self.request, ["Options"])
         self.accept("menu_QuitGame", self.exitApp)
         self.accept("menu_Back", self.request, ["Menu"])
@@ -254,6 +258,40 @@ class Main(ShowBase, FSM):
             Func(self.request, "Game"),
             name="story")
 
+        # Outros
+        self.outroImage1 = create16To9LogoCard("outro1.png", "storyOutro1TS")
+        outro1FadeInInterval = createFadeIn(self.outroImage1)
+        outro1FadeOutInterval = createFadeOut(self.outroImage1)
+        self.outroWonSequence = Sequence(
+            Func(self.outroImage1.show),
+            outro1FadeInInterval,
+            Wait(8.0),
+            outro1FadeOutInterval,
+            Func(self.request, "Game"),
+            name="OutroWon")
+
+        self.outroImage2 = create16To9LogoCard("outro2.png", "storyOutro2TS")
+        outro2FadeInInterval = createFadeIn(self.outroImage2)
+        outro2FadeOutInterval = createFadeOut(self.outroImage2)
+        self.outroLostSequence = Sequence(
+            Func(self.outroImage2.show),
+            outro2FadeInInterval,
+            Wait(8.0),
+            outro2FadeOutInterval,
+            Func(self.request, "Menu"),
+            name="OutroLost")
+
+        self.outroImage3 = create16To9LogoCard("outro3.png", "storyOutro3TS")
+        outro3FadeInInterval = createFadeIn(self.outroImage3)
+        outro3FadeOutInterval = createFadeOut(self.outroImage3)
+        self.outroWonGameSequence = Sequence(
+            Func(self.outroImage3.show),
+            outro3FadeInInterval,
+            Wait(8.0),
+            outro3FadeOutInterval,
+            Func(self.request, "Menu"),
+            name="OutroWonGame")
+
         #
         # Start with the menu after the intro has been played
         #
@@ -268,6 +306,14 @@ class Main(ShowBase, FSM):
             self.userExit()
         elif self.state == "Intro":
             self.storySequence.finish()
+        elif self.state == "Outro":
+            if self.youWon:
+                if self.currentLevel == 2:
+                    self.outroWonSequence.finish()
+                else:
+                    self.outroWonGameSequence.finish()
+            else:
+                self.outroLostSequence.finish()
         else:
             self.request("Menu")
 
@@ -295,6 +341,11 @@ class Main(ShowBase, FSM):
             self.playNextTrack()
         return task.cont
 
+    def startGame(self):
+        self.acceptWinLoose()
+        self.currentLevel = 1
+        self.request("Intro")
+
     def enterMenu(self):
         show_cursor()
         self.mainMenu.show()
@@ -312,6 +363,7 @@ class Main(ShowBase, FSM):
         self.storySequence.start()
 
     def enterGame(self):
+        self.youWon = False
         hide_cursor()
         ## Load/Start GameBase
         self.gamebase = GameBase()
@@ -319,19 +371,52 @@ class Main(ShowBase, FSM):
         self.game = Game()
         self.gamebase.start()
         self.game.setPhysicsWorld(self.gamebase.physics_world)
-        self.game.start()
+        self.game.start(self.currentLevel)
+        self.acceptWinLoose()
 
         # Debug #
         #self.gamebase.enablePhysicsDebug()
         #print (render.ls())
 
     def exitGame(self):
+        self.ignoreWinLoose()
         self.game.stop()
         self.gamebase.stop()
         del self.game
         del self.gamebase
         self.game = None
         self.gamebase = None
+
+    def enterOutro(self):
+        if self.youWon:
+            if self.currentLevel == 1:
+                print "start won seq"
+                self.outroWonSequence.start()
+            else:
+                print "start won game seq"
+                self.outroWonGameSequence.start()
+        else:
+            print "start lost seq"
+            self.outroLostSequence.start()
+
+    def wonGame(self):
+        self.ignoreWinLoose()
+        self.youWon = True
+        self.request("Outro")
+        self.currentLevel += 1
+
+    def lostGame(self):
+        self.ignoreWinLoose()
+        self.youWon = False
+        self.request("Outro")
+
+    def acceptWinLoose(self):
+        self.accept("wonGame", self.wonGame)
+        self.accept("lostGame", self.lostGame)
+
+    def ignoreWinLoose(self):
+        self.ignore("wonGame")
+        self.ignore("lostGame")
 
     def __writeConfig(self):
         """Save current config in the prc file or if no prc file exists

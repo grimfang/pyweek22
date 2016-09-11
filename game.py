@@ -21,7 +21,7 @@ from hud import Hud
 
 class Game():
 
-    def __init__(self, _parent=None):
+    def __init__(self, _parent=None, winCondition=25):
         self.parent = _parent
 
         # Containers
@@ -35,7 +35,8 @@ class Game():
 
         self.redDudesCount = 0
         self.blueDudesCount = 0
-        self.isLosing = False
+
+        self.winCondition = winCondition
 
         # Physics world
         self.physics_world = None
@@ -54,8 +55,10 @@ class Game():
         # Lightshow
         self.elapsed = 0.0
 
-    def start(self):
-        self.loadLevel("assets/level")
+
+
+    def start(self, levelID):
+        self.loadLevel("assets/level{}".format(levelID))
         self.loadLights()
 
         # player
@@ -90,15 +93,10 @@ class Game():
 
             if "red" in node.name:
                 self.redDudesCount += 1
-                #self.blueDudesCount -= 1
-                if self.blueDudesCount <= 0:
-                    self.isLosing = True
-
                 self.physics_world.removeRigidBody(self.dude.dudes[node.name].node())
                 self.dude.dudes[node.name].removeNode()
                 self.hud.update(self.redDudesCount, self.blueDudesCount)
                 del self.dude.dudes[node.name]
-                print("Current Len: ", len(self.dude.dudes))
                 break
 
 
@@ -109,6 +107,13 @@ class Game():
                 self.hud.update(self.redDudesCount, self.blueDudesCount)
                 del self.dude.dudes[node.name]
                 break
+
+        if self.redDudesCount > self.blueDudesCount:
+            base.messenger.send("lostGame")
+            return Task.done
+        elif self.blueDudesCount >= self.winCondition:
+            base.messenger.send("wonGame")
+            return Task.done
 
         for collectorGhostNP in self.game_collector_nodes:
             collectorGhost = collectorGhostNP.node()
