@@ -90,7 +90,7 @@ class Game():
 
             if "red" in node.name:
                 self.redDudesCount += 1
-                self.blueDudesCount -= 1
+                #self.blueDudesCount -= 1
                 if self.blueDudesCount <= 0:
                     self.isLosing = True
 
