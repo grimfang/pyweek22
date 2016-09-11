@@ -344,7 +344,7 @@ class Main(ShowBase, FSM):
 
     def startGame(self):
         self.acceptWinLoose()
-        self.currentLevel = 2
+        self.currentLevel = 1
         self.request("Intro")
 
     def enterMenu(self):
@@ -381,7 +381,7 @@ class Main(ShowBase, FSM):
         self.acceptWinLoose()
 
         # Debug #
-        self.gamebase.enablePhysicsDebug()
+        #self.gamebase.enablePhysicsDebug()
         #print (render.ls())
 
     def exitGame(self):
